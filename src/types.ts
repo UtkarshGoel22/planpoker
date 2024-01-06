@@ -10,7 +10,7 @@ export type CreateUser = {
 export type CustomResponse = {
   success: boolean;
   message: string;
-  data: object | null;
+  data: object | undefined;
 };
 
 export type ValidationIssue = {

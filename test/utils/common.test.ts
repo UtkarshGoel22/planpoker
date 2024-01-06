@@ -31,7 +31,7 @@ describe('Test makeResponse() function', () => {
   });
 
   test('When data is undefined', () => {
-    expect(common.makeResponse(true, 'message1', null)).toEqual({
+    expect(common.makeResponse(true, 'message1')).toEqual({
       success: true,
       message: 'message1',
     });

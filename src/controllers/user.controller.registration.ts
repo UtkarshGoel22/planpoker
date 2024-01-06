@@ -26,7 +26,7 @@ export const registerUser = async (req: Request, res: Response) => {
     );
     return res
       .status(StatusCodes.CREATED)
-      .json(makeResponse(true, ResponseMessages.REGISTRATION_SUCCESS, null));
+      .json(makeResponse(true, ResponseMessages.REGISTRATION_SUCCESS));
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

@@ -18,7 +18,7 @@ export const formatValidationErrors = (
 export const makeResponse = (
   success: boolean,
   message: string,
-  data: object | null,
+  data: object | undefined = undefined,
 ): CustomResponse => {
   return { success, message, data };
 };
