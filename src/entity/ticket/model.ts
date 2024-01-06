@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { TicketTypes } from '../../constants/enums';
 import { ColumnNames } from '../../constants/common';
 import { Pokerboard } from '../pokerboard/model';
-import { UserTicket } from '../user_ticket/model';
+import { UserTicket } from '../userTicket/model';
 
 @Entity()
 export class Ticket {

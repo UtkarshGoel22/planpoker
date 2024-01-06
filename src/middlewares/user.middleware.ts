@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { validateUserRegistrationData } from '../helpers/user_helper';
+import { validateUserRegistrationData } from '../helpers/user.helper';
 import { makeResponse } from '../utils/common';
 import { ErrorMessages, ValidationMessages } from '../constants/message';
 import { AppDataSource } from '../database/mysql';

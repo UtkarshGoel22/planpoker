@@ -11,8 +11,8 @@ import {
 import { ColumnNames } from '../../constants/common';
 import { Token } from '../token/model';
 import { Group } from '../group/model';
-import { UserPokerboard } from '../user_pokerboard/model';
-import { UserTicket } from '../user_ticket/model';
+import { UserPokerboard } from '../userPokerboard/model';
+import { UserTicket } from '../userTicket/model';
 
 @Entity()
 export class User {

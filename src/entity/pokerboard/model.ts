@@ -13,8 +13,8 @@ import { ColumnNames } from '../../constants/common';
 import { DeckTypes, PokerBoardStatus } from '../../constants/enums';
 import { Group } from '../group/model';
 import { Ticket } from '../ticket/model';
-import { UserPokerboard } from '../user_pokerboard/model';
-import { UserInviteToPokerboard } from '../pokerboard_invite/model';
+import { UserPokerboard } from '../userPokerboard/model';
+import { UserInviteToPokerboard } from '../pokerboardInvite/model';
 
 @Entity()
 export class Pokerboard {
