@@ -7,7 +7,7 @@ const config = {
   ARGON2ID_SALT: process.env.ARGON2ID_SALT,
   PORT: process.env.PORT || 3000,
   EMAIL: {
-    HOST: "smtp.gmail.com",
+    HOST: process.env.EMAIL_HOST,
     SENDER_MAIL: process.env.SENDER_EMAIL,
     SENDER_PASSWORD: process.env.SENDER_EMAIL_PASSWORD,
     SERIVCE_TYPE: process.env.EMAIL_SERVICE_TYPE,

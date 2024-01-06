@@ -3,7 +3,11 @@ import * as nodemailer from "nodemailer";
 import config from "../settings/config";
 import { LogMessages } from "../constants/message";
 
-export const sendMail = (email_subject: string, email_body: string, reciever_email: string) => {
+export const sendMail = async (
+  email_subject: string,
+  email_body: string,
+  reciever_email: string
+) => {
   const transporter = nodemailer.createTransport({
     service: config.EMAIL.SERIVCE_TYPE,
     host: config.EMAIL.HOST,
