@@ -6,17 +6,17 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { ColumnNames } from "../../constants/common";
-import { Token } from "../token/model";
-import { Group } from "../group/model";
-import { UserPokerboard } from "../user_pokerboard/model";
-import { UserTicket } from "../user_ticket/model";
+import { ColumnNames } from '../../constants/common';
+import { Token } from '../token/model';
+import { Group } from '../group/model';
+import { UserPokerboard } from '../user_pokerboard/model';
+import { UserTicket } from '../user_ticket/model';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ name: ColumnNames.FIRST_NAME })
@@ -40,10 +40,10 @@ export class User {
   @Column({ default: false, name: ColumnNames.IS_VERIFIED })
   isVerified: boolean;
 
-  @CreateDateColumn({ type: "timestamp", name: ColumnNames.CREATED_AT })
+  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.CREATED_AT })
   createdAt: Date;
 
-  @CreateDateColumn({ type: "timestamp", name: ColumnNames.UPDATED_AT })
+  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
   updateAt: Date;
 
   @OneToMany(() => Token, (token) => token.user)

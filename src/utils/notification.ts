@@ -1,12 +1,12 @@
-import * as nodemailer from "nodemailer";
+import * as nodemailer from 'nodemailer';
 
-import config from "../settings/config";
-import { LogMessages } from "../constants/message";
+import config from '../settings/config';
+import { LogMessages } from '../constants/message';
 
 export const sendMail = async (
   email_subject: string,
   email_body: string,
-  reciever_email: string
+  reciever_email: string,
 ) => {
   const transporter = nodemailer.createTransport({
     service: config.EMAIL.SERIVCE_TYPE,

@@ -1,16 +1,16 @@
-import { LogMessages } from "../../src/constants/message";
-import * as notification from "../../src/utils/notification";
+import { LogMessages } from '../../src/constants/message';
+import * as notification from '../../src/utils/notification';
 
 const sendMailMock = jest.fn();
-jest.mock("nodemailer", () => ({
+jest.mock('nodemailer', () => ({
   createTransport: jest.fn().mockImplementation(() => ({ sendMail: sendMailMock })),
 }));
 
-describe("Test sendMail() function", () => {
+describe('Test sendMail() function', () => {
   let logSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    logSpy = jest.spyOn(global.console, "log");
+    logSpy = jest.spyOn(global.console, 'log');
   });
 
   afterEach(() => {
@@ -18,23 +18,23 @@ describe("Test sendMail() function", () => {
     sendMailMock.mockClear();
   });
 
-  test("Mail sent successfully", async () => {
-    sendMailMock.mockImplementation((_mailOption, cb) => cb(null, { response: "ok" }));
+  test('Mail sent successfully', async () => {
+    sendMailMock.mockImplementation((_mailOption, cb) => cb(null, { response: 'ok' }));
 
-    await notification.sendMail("subject", "body", "receiver@example.com");
+    await notification.sendMail('subject', 'body', 'receiver@example.com');
 
     expect(sendMailMock).toHaveBeenCalled();
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith(LogMessages.SEND_EMAIL_SUCCESS, "ok");
+    expect(logSpy).toHaveBeenCalledWith(LogMessages.SEND_EMAIL_SUCCESS, 'ok');
   });
 
-  test("Failed to send mail", async () => {
-    sendMailMock.mockImplementation((_mailOption, cb) => cb("error", {}));
+  test('Failed to send mail', async () => {
+    sendMailMock.mockImplementation((_mailOption, cb) => cb('error', {}));
 
-    await notification.sendMail("subject", "body", "receiver@example.com");
+    await notification.sendMail('subject', 'body', 'receiver@example.com');
 
     expect(sendMailMock).toHaveBeenCalled();
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith(LogMessages.SEND_EMAIL_FAILURE, "error");
+    expect(logSpy).toHaveBeenCalledWith(LogMessages.SEND_EMAIL_FAILURE, 'error');
   });
 });

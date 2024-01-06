@@ -1,9 +1,9 @@
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 const config = {
-  APP_URL: process.env.ORIGIN || "http://localhost:3000",
+  APP_URL: process.env.ORIGIN || 'http://localhost:3000',
   ARGON2ID_SALT: process.env.ARGON2ID_SALT,
   PORT: process.env.PORT || 3000,
   EMAIL: {

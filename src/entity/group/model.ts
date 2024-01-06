@@ -5,15 +5,15 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { ColumnNames } from "../../constants/common";
-import { User } from "../user/model";
-import { Pokerboard } from "../pokerboard/model";
+import { ColumnNames } from '../../constants/common';
+import { User } from '../user/model';
+import { Pokerboard } from '../pokerboard/model';
 
 @Entity()
 export class Group {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ unique: true })
@@ -28,10 +28,10 @@ export class Group {
   @Column({ default: true, name: ColumnNames.IS_ACTIVE })
   isActive: boolean;
 
-  @CreateDateColumn({ type: "timestamp", name: ColumnNames.CREATED_AT })
+  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.CREATED_AT })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", name: ColumnNames.UPDATED_AT })
+  @UpdateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
   updatedAt: Date;
 
   @ManyToMany(() => User, (user) => user.groups)

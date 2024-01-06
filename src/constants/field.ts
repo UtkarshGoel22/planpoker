@@ -1,9 +1,9 @@
 export const FieldNames = {
-  FIRST_NAME: "First Name",
-  LAST_NAME: "Last Name",
-  USERNAME: "Username",
-  EMAIL: "Email",
-  PASSWORD: "Password",
+  FIRST_NAME: 'First Name',
+  LAST_NAME: 'Last Name',
+  USERNAME: 'Username',
+  EMAIL: 'Email',
+  PASSWORD: 'Password',
 };
 
 export const FieldConstraints = {

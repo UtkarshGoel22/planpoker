@@ -1,32 +1,36 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { CustomResponse, ValidationIssue } from "../types";
+import { CustomResponse, ValidationIssue } from '../types';
 
 export const formatValidationErrors = (
-  validationErrors: ValidationIssue[]
+  validationErrors: ValidationIssue[],
 ): { [key: string]: string } => {
-  let formattedValidationErrors = {};
+  const formattedValidationErrors = {};
   validationErrors.forEach((validationError) => {
-    let key = validationError.path.join(".");
+    const key = validationError.path.join('.');
     formattedValidationErrors[key] = formattedValidationErrors[key]
-      ? formattedValidationErrors[key] + ". " + validationError.message
+      ? formattedValidationErrors[key] + '. ' + validationError.message
       : validationError.message;
   });
   return formattedValidationErrors;
 };
 
-export const makeResponse = (success: boolean, message: string, data: any): CustomResponse => {
+export const makeResponse = (
+  success: boolean,
+  message: string,
+  data: object | null,
+): CustomResponse => {
   return { success, message, data };
 };
 
 export const validateData = (
-  schema: z.ZodEffects<z.ZodObject<any>> | z.ZodObject<any>,
-  data: any
+  schema: z.ZodEffects<z.ZodObject<any>> | z.ZodObject<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+  data: object,
 ): { [key: string]: string } | null => {
   let errorData = null;
   const result = schema.safeParse(data);
   if (!result.success) {
-    errorData = formatValidationErrors(result["error"].issues);
+    errorData = formatValidationErrors(result['error'].issues);
   }
   return errorData;
 };

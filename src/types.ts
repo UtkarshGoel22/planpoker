@@ -7,19 +7,14 @@ export type CreateUser = {
   username: string;
 };
 
-export type CustomError = {
-  message: string;
-  data: any;
-};
-
 export type CustomResponse = {
   success: boolean;
   message: string;
-  data: any;
+  data: object | null;
 };
 
 export type ValidationIssue = {
   path: string[];
   message: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };

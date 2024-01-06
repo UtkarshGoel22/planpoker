@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { Regex } from "../constants/common";
-import { FieldConstraints, FieldNames } from "../constants/field";
-import { ValidationMessages } from "../constants/message";
+import { Regex } from '../constants/common';
+import { FieldConstraints, FieldNames } from '../constants/field';
+import { ValidationMessages } from '../constants/message';
 
 export const registrationSchema = z
   .object({

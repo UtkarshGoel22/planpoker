@@ -1,7 +1,7 @@
-import { DataSource } from "typeorm";
-import { LogMessages } from "../constants/message";
+import { DataSource } from 'typeorm';
+import { LogMessages } from '../constants/message';
 
-const ormConfig = require("../settings/ormconfig");
+const ormConfig = require('../settings/ormconfig'); // eslint-disable-line @typescript-eslint/no-var-requires
 
 export const AppDataSource = new DataSource(ormConfig);
 

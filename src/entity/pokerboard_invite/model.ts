@@ -5,13 +5,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { ColumnNames } from "../../constants/common";
-import { Pokerboard } from "../pokerboard/model";
+} from 'typeorm';
+import { ColumnNames } from '../../constants/common';
+import { Pokerboard } from '../pokerboard/model';
 
 @Entity()
 export class UserInviteToPokerboard {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -23,10 +23,10 @@ export class UserInviteToPokerboard {
   @Column({ default: false, name: ColumnNames.IS_VERIFIED })
   isVerified: boolean;
 
-  @CreateDateColumn({ type: "timestamp", name: ColumnNames.CREATED_AT })
+  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.CREATED_AT })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", name: ColumnNames.UPDATED_AT })
+  @UpdateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
   updatedAt: Date;
 
   @ManyToOne(() => Pokerboard, (board) => board.unverifiedUsersInvite)

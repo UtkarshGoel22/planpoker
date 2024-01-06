@@ -1,11 +1,11 @@
-import { NextFunction, Response, Request } from "express";
-import { StatusCodes } from "http-status-codes";
+import { NextFunction, Response, Request } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
-import { validateUserRegistrationData } from "../helpers/user_helper";
-import { makeResponse } from "../utils/common";
-import { ErrorMessages, ValidationMessages } from "../constants/message";
-import { AppDataSource } from "../database/mysql";
-import { User } from "../entity/user/model";
+import { validateUserRegistrationData } from '../helpers/user_helper';
+import { makeResponse } from '../utils/common';
+import { ErrorMessages, ValidationMessages } from '../constants/message';
+import { AppDataSource } from '../database/mysql';
+import { User } from '../entity/user/model';
 
 export const registerUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -22,7 +22,7 @@ export const registerUserValidation = async (req: Request, res: Response, next: 
     return res.status(StatusCodes.BAD_REQUEST).json(
       makeResponse(false, ErrorMessages.INVALID_REQUEST_DATA, {
         username: ValidationMessages.USERNAME_ALREADY_EXISTS,
-      })
+      }),
     );
   }
 

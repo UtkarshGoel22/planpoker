@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { ColumnNames, TableNames } from "../../constants/common";
-import { User } from "../user/model";
-import { Ticket } from "../ticket/model";
+import { ColumnNames, TableNames } from '../../constants/common';
+import { User } from '../user/model';
+import { Ticket } from '../ticket/model';
 
 @Entity({ name: TableNames.USER_TICKET })
 export class UserTicket {
@@ -12,7 +12,7 @@ export class UserTicket {
   @Column()
   estimate: number;
 
-  @CreateDateColumn({ type: "timestamp", name: ColumnNames.ESTIMATE_DATE })
+  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.ESTIMATE_DATE })
   estimateDate: Date;
 
   @Column({ nullable: true, name: ColumnNames.ESTIMATE_TIME })

@@ -1,15 +1,15 @@
-import { Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
+import { Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 
-import { hashPassword } from "../utils/auth";
-import { User } from "../entity/user/model";
-import { createUser } from "../entity/user/repository";
-import { sendMail } from "../utils/notification";
-import { EmailSubject } from "../constants/enums";
-import { EmailMessages, ResponseMessages } from "../constants/message";
-import config from "../settings/config";
-import { makeResponse } from "../utils/common";
-import { StatusCodes } from "http-status-codes";
+import { hashPassword } from '../utils/auth';
+import { User } from '../entity/user/model';
+import { createUser } from '../entity/user/repository';
+import { sendMail } from '../utils/notification';
+import { EmailSubject } from '../constants/enums';
+import { EmailMessages, ResponseMessages } from '../constants/message';
+import config from '../settings/config';
+import { makeResponse } from '../utils/common';
+import { StatusCodes } from 'http-status-codes';
 
 export const registerUser = async (req: Request, res: Response) => {
   const body = req.body;
@@ -22,11 +22,11 @@ export const registerUser = async (req: Request, res: Response) => {
     sendMail(
       EmailSubject.REGISTRATION_SUCESS,
       EmailMessages.REGISTRATION_SUCCESS(token),
-      user.email
+      user.email,
     );
     return res
       .status(StatusCodes.CREATED)
-      .json(makeResponse(true, ResponseMessages.REGISTRATION_SUCCESS, user));
+      .json(makeResponse(true, ResponseMessages.REGISTRATION_SUCCESS, null));
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

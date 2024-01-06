@@ -7,18 +7,18 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { ColumnNames } from "../../constants/common";
-import { DeckTypes, PokerBoardStatus } from "../../constants/enums";
-import { Group } from "../group/model";
-import { Ticket } from "../ticket/model";
-import { UserPokerboard } from "../user_pokerboard/model";
-import { UserInviteToPokerboard } from "../pokerboard_invite/model";
+import { ColumnNames } from '../../constants/common';
+import { DeckTypes, PokerBoardStatus } from '../../constants/enums';
+import { Group } from '../group/model';
+import { Ticket } from '../ticket/model';
+import { UserPokerboard } from '../user_pokerboard/model';
+import { UserInviteToPokerboard } from '../pokerboard_invite/model';
 
 @Entity()
 export class Pokerboard {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -36,10 +36,10 @@ export class Pokerboard {
   @Column({ default: true, name: ColumnNames.IS_ACTIVE })
   isActive: boolean;
 
-  @CreateDateColumn({ type: "timestamp", name: ColumnNames.CREATED_AT })
+  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.CREATED_AT })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", name: ColumnNames.UPDATED_AT })
+  @UpdateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
   updatedAt: Date;
 
   @ManyToMany(() => Group, (group) => group.pokerboards)

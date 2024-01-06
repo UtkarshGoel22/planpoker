@@ -1,12 +1,12 @@
-import "reflect-metadata";
-import cors from "cors";
-import express from "express";
+import 'reflect-metadata';
+import cors from 'cors';
+import express from 'express';
 
-import { LogMessages } from "./constants/message";
-import { connectToMySQLDB } from "./database/mysql";
-import userRouter from "./routes/user_routes";
-import config from "./settings/config";
-import { Routes } from "./constants/enums";
+import { LogMessages } from './constants/message';
+import { connectToMySQLDB } from './database/mysql';
+import userRouter from './routes/user_routes';
+import config from './settings/config';
+import { Routes } from './constants/enums';
 
 const app = express();
 

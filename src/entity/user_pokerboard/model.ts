@@ -1,9 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { ColumnNames, TableNames } from "../../constants/common";
-import { InviteStatus, UserRoles } from "../../constants/enums";
-import { User } from "../user/model";
-import { Pokerboard } from "../pokerboard/model";
+import { ColumnNames, TableNames } from '../../constants/common';
+import { InviteStatus, UserRoles } from '../../constants/enums';
+import { User } from '../user/model';
+import { Pokerboard } from '../pokerboard/model';
 
 @Entity({ name: TableNames.USER_POKERBOARD })
 export class UserPokerboard {
