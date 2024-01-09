@@ -7,6 +7,6 @@ const router: express.Router = express.Router();
 
 router.post('/signup', registerUserValidation, registerUser);
 
-router.get('verify', verifyUserValidation, verifyUser);
+router.get('/verify', verifyUserValidation, verifyUser);
 
 export default router;
