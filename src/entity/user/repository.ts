@@ -43,3 +43,8 @@ export const findAndUpdateUser = async (
   const userRepository = customGetRepository(User);
   return userRepository.update(findOptions, dataToUpdate);
 };
+
+export const findUser = async (findOptions: FindOptionsWhere<User>): Promise<User> => {
+  const userRepository = customGetRepository(User);
+  return userRepository.findOne({ where: findOptions });
+};

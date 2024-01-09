@@ -35,6 +35,12 @@ export const registrationSchema = z
     path: [FieldNames.PASSWORD],
   });
 
+export const userReverificationSchema = z.object({
+  email: z
+    .string({ required_error: ValidationMessages.EMAIL_REQUIRED })
+    .email(ValidationMessages.INVALID_EMAIL),
+});
+
 export const userVerificationSchema = z.object({
   token: z.string({ required_error: ValidationMessages.TOKEN_REQUIRED }),
 });
