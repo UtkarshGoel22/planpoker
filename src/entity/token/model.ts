@@ -20,6 +20,6 @@ export class Token {
   @Column({ type: 'datetime', name: ColumnNames.EXPIRY_DATE })
   expiryDate: Date;
 
-  @ManyToOne(() => User, (user) => user.tokens)
+  @ManyToOne(() => User, (user) => user.tokens, { onDelete: 'CASCADE' })
   user: Promise<User>;
 }

@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
 
+import { Environments } from '../constants/common';
+
 dotenv.config();
 
 const config = {
@@ -13,6 +15,7 @@ const config = {
     SERIVCE_TYPE: process.env.EMAIL_SERVICE_TYPE,
   },
   JWT: { EXPIRY: process.env.JWT_EXPIRY, SECRECT: process.env.JWT_SECRET },
+  NODE_ENV: process.env.NODE_ENV || Environments.DEV,
 };
 
 export default config;

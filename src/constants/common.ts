@@ -19,6 +19,11 @@ export const ColumnNames = {
   UPDATED_AT: 'updated_at',
 };
 
+export const Environments = {
+  DEV: 'development',
+  TEST: 'test',
+};
+
 export const TableNames = {
   USER_POKERBOARD: 'user_pokerboard',
   USER_TICKET: 'user_ticket',

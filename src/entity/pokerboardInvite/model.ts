@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { ColumnNames } from '../../constants/common';
 import { Pokerboard } from '../pokerboard/model';
 
@@ -29,6 +30,6 @@ export class UserInviteToPokerboard {
   @UpdateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
   updatedAt: Date;
 
-  @ManyToOne(() => Pokerboard, (board) => board.unverifiedUsersInvite)
+  @ManyToOne(() => Pokerboard, (board) => board.unverifiedUsersInvite, { onDelete: 'CASCADE' })
   pokerboard: Promise<Pokerboard>;
 }

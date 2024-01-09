@@ -25,9 +25,9 @@ export class UserPokerboard {
   @Column({ nullable: true })
   pokerboardId: string;
 
-  @ManyToOne(() => User, (user) => user.userPokerboard)
+  @ManyToOne(() => User, (user) => user.userPokerboard, { onDelete: 'CASCADE' })
   user!: Promise<User>;
 
-  @ManyToOne(() => Pokerboard, (pokerboard) => pokerboard.userPokerboard)
+  @ManyToOne(() => Pokerboard, (pokerboard) => pokerboard.userPokerboard, { onDelete: 'CASCADE' })
   pokerboard!: Promise<Pokerboard>;
 }

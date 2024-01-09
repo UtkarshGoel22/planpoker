@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ColumnNames, TableNames } from '../../constants/common';
-import { User } from '../user/model';
 import { Ticket } from '../ticket/model';
+import { User } from '../user/model';
 
 @Entity({ name: TableNames.USER_TICKET })
 export class UserTicket {
@@ -24,9 +24,9 @@ export class UserTicket {
   @Column({ nullable: true })
   ticketId: string;
 
-  @ManyToOne(() => User, (user) => user.userTicket)
+  @ManyToOne(() => User, (user) => user.userTicket, { onDelete: 'CASCADE' })
   user: Promise<User>;
 
-  @ManyToOne(() => Ticket, (ticket) => ticket.userTicket)
+  @ManyToOne(() => Ticket, (ticket) => ticket.userTicket, { onDelete: 'CASCADE' })
   ticket: Promise<Ticket>;
 }

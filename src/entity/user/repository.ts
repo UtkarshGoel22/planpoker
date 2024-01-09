@@ -1,11 +1,13 @@
+import { StatusCodes } from 'http-status-codes';
+
 import { ErrorMessages } from '../../constants/message';
-import { AppDataSource } from '../../database/mysql';
 import { CreateUser } from '../../types';
+import customGetRepository from '../../utils/db';
 import { User } from './model';
 
 export const createUser = async (data: CreateUser): Promise<User> => {
   const { email, firstName, password, lastName, username } = data;
-  const userRepository = AppDataSource.getRepository(User);
+  const userRepository = customGetRepository(User);
   const newUser = userRepository.create({ email, firstName, password, lastName, username });
 
   const result = await userRepository.update(
@@ -18,11 +20,16 @@ export const createUser = async (data: CreateUser): Promise<User> => {
   }
 
   try {
-    return userRepository.save(newUser);
+    return await userRepository.save(newUser);
   } catch (error) {
+    console.log('Error while saving user:', error);
     const errorData: { [key: string]: string } = {
       duplicateEntry: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
     };
-    throw { message: ErrorMessages.ACCOUNT_ALREADY_EXISTS, data: errorData };
+    throw {
+      statusCode: StatusCodes.BAD_REQUEST,
+      message: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
+      data: errorData,
+    };
   }
 };

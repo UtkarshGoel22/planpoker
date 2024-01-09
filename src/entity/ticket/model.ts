@@ -28,7 +28,7 @@ export class Ticket {
   @Column({ default: true, name: ColumnNames.IS_ACTIVE })
   isActive: boolean;
 
-  @ManyToOne(() => Pokerboard, (pokerboard) => pokerboard.tickets)
+  @ManyToOne(() => Pokerboard, (pokerboard) => pokerboard.tickets, { onDelete: 'CASCADE' })
   pokerboard: Promise<Pokerboard>;
 
   @OneToMany(() => UserTicket, (userTicket) => userTicket.ticket)

@@ -6,11 +6,12 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { ColumnNames } from '../../constants/common';
-import { Token } from '../token/model';
 import { Group } from '../group/model';
+import { Token } from '../token/model';
 import { UserPokerboard } from '../userPokerboard/model';
 import { UserTicket } from '../userTicket/model';
 
@@ -43,13 +44,13 @@ export class User {
   @CreateDateColumn({ type: 'timestamp', name: ColumnNames.CREATED_AT })
   createdAt: Date;
 
-  @CreateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
-  updateAt: Date;
+  @UpdateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
+  updatedAt: Date;
 
   @OneToMany(() => Token, (token) => token.user)
   tokens: Promise<Token[]>;
 
-  @ManyToMany(() => Group, (group) => group.users)
+  @ManyToMany(() => Group, (group) => group.users, { onDelete: 'CASCADE' })
   @JoinTable()
   groups: Promise<Group[]>;
 

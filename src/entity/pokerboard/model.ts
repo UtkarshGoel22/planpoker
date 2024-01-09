@@ -12,9 +12,9 @@ import {
 import { ColumnNames } from '../../constants/common';
 import { DeckTypes, PokerBoardStatus } from '../../constants/enums';
 import { Group } from '../group/model';
+import { UserInviteToPokerboard } from '../pokerboardInvite/model';
 import { Ticket } from '../ticket/model';
 import { UserPokerboard } from '../userPokerboard/model';
-import { UserInviteToPokerboard } from '../pokerboardInvite/model';
 
 @Entity()
 export class Pokerboard {
@@ -42,7 +42,7 @@ export class Pokerboard {
   @UpdateDateColumn({ type: 'timestamp', name: ColumnNames.UPDATED_AT })
   updatedAt: Date;
 
-  @ManyToMany(() => Group, (group) => group.pokerboards)
+  @ManyToMany(() => Group, (group) => group.pokerboards, { onDelete: 'CASCADE' })
   @JoinTable()
   groups: Promise<Group[]>;
 
