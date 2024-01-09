@@ -1,4 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
+import { FindOptionsWhere, UpdateResult } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { ErrorMessages } from '../../constants/message';
 import { CreateUser } from '../../types';
@@ -10,7 +12,7 @@ export const createUser = async (data: CreateUser): Promise<User> => {
   const userRepository = customGetRepository(User);
   const newUser = userRepository.create({ email, firstName, password, lastName, username });
 
-  const result = await userRepository.update(
+  const result = await findAndUpdateUser(
     { email: data.email, isActive: false },
     { firstName, password, lastName, username, isActive: true },
   );
@@ -32,4 +34,12 @@ export const createUser = async (data: CreateUser): Promise<User> => {
       data: errorData,
     };
   }
+};
+
+export const findAndUpdateUser = async (
+  findOptions: FindOptionsWhere<User>,
+  dataToUpdate: QueryDeepPartialEntity<User>,
+): Promise<UpdateResult> => {
+  const userRepository = customGetRepository(User);
+  return userRepository.update(findOptions, dataToUpdate);
 };

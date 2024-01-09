@@ -7,12 +7,18 @@ export const EmailMessages = {
   <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
   <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
   </body>`,
+  VERIFICATION_SUCCESS: `<body>
+  <h1> Account Verified Successfully!! </h1>
+  <p> Your account has been verified successfully. Login to your account and start planning poker. </p>
+  </body>`,
 };
 
 export const ErrorMessages = {
   ACCOUNT_ALREADY_EXISTS: 'Account already exists',
+  ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
   INVALID_REQUEST_DATA: 'Invalid request data',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
+  USER_VERIFICATION_FAILED: 'User verfication failed',
 };
 
 export const LogMessages = {
@@ -25,6 +31,7 @@ export const LogMessages = {
 };
 
 export const ResponseMessages = {
+  ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
 };
 
@@ -38,6 +45,7 @@ export const ValidationMessages = {
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
   PASSWORD_REQUIRED: 'Password is a required field',
+  TOKEN_REQUIRED: 'Token is a required field',
   USERNAME_ALREADY_EXISTS: 'Username already exists',
   USERNAME_MAX_LENGTH: 'Username length can be upto 30',
   USERNAME_MIN_LENGTH: 'Username length must be atleast 4',
