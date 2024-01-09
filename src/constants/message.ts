@@ -7,6 +7,10 @@ export const EmailMessages = {
   <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
   <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
   </body>`,
+  VERIFY_EMAIL: (token: string) => `<body>
+  <h1> Email address verification </h1>
+  <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
+  </body>`,
   VERIFICATION_SUCCESS: `<body>
   <h1> Account Verified Successfully!! </h1>
   <p> Your account has been verified successfully. Login to your account and start planning poker. </p>
@@ -17,6 +21,7 @@ export const ErrorMessages = {
   ACCOUNT_ALREADY_EXISTS: 'Account already exists',
   ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
   INVALID_REQUEST_DATA: 'Invalid request data',
+  NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL: 'No account associated with the given email',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
   USER_VERIFICATION_FAILED: 'User verfication failed',
 };
@@ -33,6 +38,7 @@ export const LogMessages = {
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
+  VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
 };
 
 export const ValidationMessages = {

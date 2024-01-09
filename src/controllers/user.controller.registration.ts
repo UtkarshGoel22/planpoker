@@ -33,6 +33,17 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
+export const reverifyUser = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const token = jwt.sign({ email: email, id: req.user.id }, config.JWT.SECRECT, {
+    expiresIn: config.JWT.EXPIRY,
+  });
+  sendMail(EmailSubject.EMAIL_VERIFICATION, EmailMessages.VERIFY_EMAIL(token), email);
+  return res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.VERIFICATION_LINK_SENT));
+};
+
 export const verifyUser = async (req: Request, res: Response) => {
   const token = req.query.token.toString();
   jwt.verify(token, config.JWT.SECRECT, async (error, decoded) => {

@@ -8,6 +8,7 @@ export enum DeckTypes {
 export enum EmailSubject {
   REGISTRATION_SUCESS = 'Registered successfully!!',
   VERIFICATION_SUCCESS = 'Account verified successfully!!',
+  EMAIL_VERIFICATION = 'Email verification',
 }
 
 export enum InviteStatus {
