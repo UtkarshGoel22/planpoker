@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended", // For using the recommended rules from the @typescript-eslint/eslint-plugin
+    "plugin:prettier/recommended" // For using eslint-plugin-prettier and eslint-config-prettier. Displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+  ],
+  "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+  "parserOptions": {
+    "ecmaVersion": "latest", // For parsing modern ECMAScript features
+    "sourceType": "module" // For usage of imports
+  },
+  "plugins": ["eslint-plugin-tsdoc"],
+  "rules": {
+    "tsdoc/syntax": "warn"
+  }
+}

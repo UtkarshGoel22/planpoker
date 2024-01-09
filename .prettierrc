@@ -1,0 +1,15 @@
+{
+  "bracketSpacing": true,
+  "printWidth": 100,
+  "trailingCommas": "es5",
+  "singleQuote": true,
+  "semi": true,
+  "overrides": [
+    {
+      "files": ["*.js", "*.ts"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}
