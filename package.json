@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "watch": "ts-node-dev src/index.ts",
+    "watch": "ts-node-dev src/server.ts",
     "migration:generate": "npx typeorm-ts-node-commonjs migration:generate ./src/migration/PostRefactoring -d ./src/settings/ormconfig.ts",
     "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/settings/ormconfig.ts",
     "migration:revert": "npx typeorm migration:revert -- -d ./src/settings/ormconfig.ts"

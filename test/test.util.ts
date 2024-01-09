@@ -7,11 +7,11 @@ import { TestData } from './test.data';
 import { TestUser } from './test.types';
 
 export const createTestingConnections = async (): Promise<DataSource> => {
-  return await dataSource.TestDataSource.initialize();
+  return dataSource.TestDataSource.initialize();
 };
 
-export const closeTestingConnections = async (connection: DataSource) => {
-  return connection.isInitialized ? await connection.destroy() : undefined;
+export const closeTestingConnections = async (connection: DataSource): Promise<void> => {
+  return connection.isInitialized ? connection.destroy() : undefined;
 };
 
 export const clearTestingDatabases = async (connection: DataSource) => {
@@ -23,8 +23,8 @@ export const clearTestingDatabases = async (connection: DataSource) => {
   await connection.query(`SET FOREIGN_KEY_CHECKS=1;`);
 };
 
-export const dropTestingDatabases = async (connection: DataSource) => {
-  return await connection.dropDatabase();
+export const dropTestingDatabases = async (connection: DataSource): Promise<void> => {
+  return connection.dropDatabase();
 };
 
 export const createTestUser = async (data: TestUser = {}) => {

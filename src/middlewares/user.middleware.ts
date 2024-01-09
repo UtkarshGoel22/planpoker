@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ErrorMessages, ValidationMessages } from '../constants/message';
 import { User } from '../entity/user/model';
-import { validateUserRegistrationData } from '../helpers/user.helper';
+import { validateUserRegistrationData, validateUserVerificationData } from '../helpers/user.helper';
 import { makeResponse } from '../utils/common';
 import customGetRepository from '../utils/db';
 
@@ -24,6 +24,16 @@ export const registerUserValidation = async (req: Request, res: Response, next: 
         username: ValidationMessages.USERNAME_ALREADY_EXISTS,
       }),
     );
+  }
+
+  next();
+};
+
+export const verifyUserValidation = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    validateUserVerificationData(req.query);
+  } catch (error) {
+    return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
 
   next();

@@ -34,3 +34,7 @@ export const registrationSchema = z
     message: ValidationMessages.PASSWORD_DOES_NOT_MATCH,
     path: [FieldNames.PASSWORD],
   });
+
+export const userVerificationSchema = z.object({
+  token: z.string({ required_error: ValidationMessages.TOKEN_REQUIRED }),
+});
