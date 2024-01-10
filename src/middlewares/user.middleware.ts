@@ -99,6 +99,7 @@ export const tokenValidation = async (req: Request, res: Response, next: NextFun
   }
 
   req.token = token;
+  req.user = await token.user;
   next();
 };
 

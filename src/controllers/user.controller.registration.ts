@@ -12,6 +12,20 @@ import { comparePassword, hashPassword } from '../utils/auth';
 import { makeResponse } from '../utils/common';
 import { sendMail } from '../utils/notification';
 
+export const getUser = async (req: Request, res: Response) => {
+  const { password, ...user } = req.user; // eslint-disable-line @typescript-eslint/no-unused-vars
+  if (!user.isVerified) {
+    const errorData = { verify: ErrorMessages.ACCOUNT_NOT_VERIFIED };
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json(makeResponse(false, ErrorMessages.ACCOUNT_NOT_VERIFIED, errorData));
+  } else {
+    return res
+      .status(StatusCodes.OK)
+      .json(makeResponse(true, ResponseMessages.GET_USER_SUCCESS, user));
+  }
+};
+
 export const loginUser = async (req: Request, res: Response) => {
   const user = req.user;
   const { password, ...userData } = user;

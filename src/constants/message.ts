@@ -41,6 +41,7 @@ export const LogMessages = {
 
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
+  GET_USER_SUCCESS: 'Fetched user details successfully',
   LOGIN_SUCCESS: 'Logged in successfully',
   LOGOUT_SUCCESS: 'Logged out successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
