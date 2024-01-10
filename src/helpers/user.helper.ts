@@ -3,6 +3,7 @@ import {
   loginSchema,
   registrationSchema,
   userReverificationSchema,
+  userUpdationSchema,
   userVerificationSchema,
 } from '../schemas/user.schema';
 import { validateData } from '../utils/common';
@@ -23,6 +24,13 @@ export const validateUserRegistrationData = (data: object) => {
 
 export const validateUserReverificationData = (data: object) => {
   const errorData: { [key: string]: string } | null = validateData(userReverificationSchema, data);
+  if (errorData) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: errorData };
+  }
+};
+
+export const validateUserUpdationData = (data: object) => {
+  const errorData: { [key: string]: string } | null = validateData(userUpdationSchema, data);
   if (errorData) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: errorData };
   }

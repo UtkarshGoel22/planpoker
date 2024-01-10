@@ -1,12 +1,18 @@
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { Not } from 'typeorm';
 
 import { EmailSubject } from '../constants/enums';
-import { EmailMessages, ErrorMessages, ResponseMessages } from '../constants/message';
+import {
+  EmailMessages,
+  ErrorMessages,
+  ResponseMessages,
+  ValidationMessages,
+} from '../constants/message';
 import { createToken, findAndUpdateToken } from '../entity/token/repository';
 import { User } from '../entity/user/model';
-import { createUser, findAndUpdateUser } from '../entity/user/repository';
+import { createUser, findAndUpdateUser, findUser, saveUser } from '../entity/user/repository';
 import config from '../settings/config';
 import { comparePassword, hashPassword } from '../utils/auth';
 import { makeResponse } from '../utils/common';
@@ -79,6 +85,37 @@ export const reverifyUser = async (req: Request, res: Response) => {
   return res
     .status(StatusCodes.OK)
     .json(makeResponse(true, ResponseMessages.VERIFICATION_LINK_SENT));
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  const { firstName, lastName, username } = req.body;
+  const user = req.user;
+
+  if (firstName) {
+    user.firstName = firstName;
+  }
+
+  if (lastName) {
+    user.lastName = lastName;
+  }
+
+  if (username) {
+    const userWithSameUsername = await findUser({ username: username, id: Not(user.id) });
+    if (userWithSameUsername) {
+      const errorData = { username: ValidationMessages.USERNAME_ALREADY_EXISTS };
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(makeResponse(false, ValidationMessages.USERNAME_ALREADY_EXISTS, errorData));
+    } else {
+      user.username = username;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password, ...userData } = await saveUser(user);
+  return res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.UPDATE_USER_SUCCESS, userData));
 };
 
 export const verifyUser = async (req: Request, res: Response) => {

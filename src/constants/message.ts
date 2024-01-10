@@ -45,6 +45,7 @@ export const ResponseMessages = {
   LOGIN_SUCCESS: 'Logged in successfully',
   LOGOUT_SUCCESS: 'Logged out successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
+  UPDATE_USER_SUCCESS: 'User updated successfully',
   VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
 };
 
