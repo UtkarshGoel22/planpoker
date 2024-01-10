@@ -14,10 +14,10 @@ export class Token {
   @CreateDateColumn({ type: 'timestamp', name: ColumnNames.CREATED_AT })
   createdAt: Date;
 
-  @Column({ nullable: true, name: ColumnNames.EXPIRED_AT })
+  @Column({ type: 'timestamp', nullable: true, name: ColumnNames.EXPIRED_AT })
   expiredAt!: Date;
 
-  @Column({ type: 'datetime', name: ColumnNames.EXPIRY_DATE })
+  @Column({ type: 'timestamp', name: ColumnNames.EXPIRY_DATE })
   expiryDate: Date;
 
   @ManyToOne(() => User, (user) => user.tokens, { onDelete: 'CASCADE' })
