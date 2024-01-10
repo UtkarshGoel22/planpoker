@@ -4,12 +4,29 @@ import * as jwt from 'jsonwebtoken';
 
 import { EmailSubject } from '../constants/enums';
 import { EmailMessages, ErrorMessages, ResponseMessages } from '../constants/message';
+import { createToken } from '../entity/token/repository';
 import { User } from '../entity/user/model';
 import { createUser, findAndUpdateUser } from '../entity/user/repository';
 import config from '../settings/config';
-import { hashPassword } from '../utils/auth';
+import { comparePassword, hashPassword } from '../utils/auth';
 import { makeResponse } from '../utils/common';
 import { sendMail } from '../utils/notification';
+
+export const loginUser = async (req: Request, res: Response) => {
+  const user = req.user;
+  const { password, ...userData } = user;
+
+  try {
+    await comparePassword(req.body.password, password);
+  } catch (error) {
+    return res.status(error.statusCode).json(makeResponse(false, error.message, error.data));
+  }
+
+  const { token } = await createToken(user);
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.LOGIN_SUCCESS, { token, userData }));
+};
 
 export const registerUser = async (req: Request, res: Response) => {
   const body = req.body;

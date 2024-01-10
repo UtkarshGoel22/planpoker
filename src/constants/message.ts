@@ -20,6 +20,8 @@ export const EmailMessages = {
 export const ErrorMessages = {
   ACCOUNT_ALREADY_EXISTS: 'Account already exists',
   ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
+  ACCOUNT_NOT_VERIFIED: 'Your account in not verified. Kindly verify your account',
+  INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
   INVALID_REQUEST_DATA: 'Invalid request data',
   NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL: 'No account associated with the given email',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
@@ -31,12 +33,14 @@ export const LogMessages = {
   DATABASE_CONNECTION_SUCCESS: 'Successfully connected to database',
   LISTENING_ON_PORT: 'Listening on port',
   PASSWORD_HASHING_FAILURE: 'Error while hashing password:',
+  PASSWORD_VERIFICATION_FAILURE: 'Error while verifying password',
   SEND_EMAIL_SUCCESS: 'Email sent successfully:',
   SEND_EMAIL_FAILURE: 'Error while sending email:',
 };
 
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
+  LOGIN_SUCCESS: 'Logged in successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
   VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
 };
