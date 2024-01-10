@@ -1,11 +1,13 @@
 import express from 'express';
 
 import {
+  loginUser,
   registerUser,
   reverifyUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
 import {
+  loginUserValidation,
   registerUserValidation,
   reverifyUserValidation,
   verifyUserValidation,
@@ -18,5 +20,7 @@ router.post('/signup', registerUserValidation, registerUser);
 router.get('/verify', verifyUserValidation, verifyUser);
 
 router.post('/verify', reverifyUserValidation, reverifyUser);
+
+router.post('/login', loginUserValidation, loginUser);
 
 export default router;

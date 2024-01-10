@@ -2,7 +2,17 @@ import { z } from 'zod';
 
 import { Regex } from '../constants/common';
 import { FieldConstraints, FieldNames } from '../constants/field';
-import { ValidationMessages } from '../constants/message';
+import { ErrorMessages, ValidationMessages } from '../constants/message';
+
+export const loginSchema = z.object({
+  email: z
+    .string({ required_error: ValidationMessages.EMAIL_REQUIRED })
+    .email(ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD),
+  password: z
+    .string({ required_error: ValidationMessages.PASSWORD_REQUIRED })
+    .min(FieldConstraints.PASSWORD.MIN, ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD)
+    .max(FieldConstraints.PASSWORD.MAX, ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD),
+});
 
 export const registrationSchema = z
   .object({
