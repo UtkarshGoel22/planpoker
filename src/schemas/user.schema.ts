@@ -51,6 +51,23 @@ export const userReverificationSchema = z.object({
     .email(ValidationMessages.INVALID_EMAIL),
 });
 
+export const userUpdationSchema = z.object({
+  firstName: z
+    .string({ required_error: ValidationMessages.FIRST_NAME_REQUIRED })
+    .max(FieldConstraints.FIRST_NAME.MAX, ValidationMessages.FIRST_NAME_MAX_LENGTH)
+    .optional(),
+  lastName: z
+    .string()
+    .max(FieldConstraints.LAST_NAME.MAX, ValidationMessages.LAST_NAME_MAX_LENGTH)
+    .optional(),
+  username: z
+    .string({ required_error: ValidationMessages.USERNAME_REQUIRED })
+    .min(FieldConstraints.USERNAME.MIN, ValidationMessages.USERNAME_MIN_LENGTH)
+    .max(FieldConstraints.USERNAME.MAX, ValidationMessages.USERNAME_MAX_LENGTH)
+    .regex(Regex.ALPHANUMERIC, ValidationMessages.USERNAME_MUST_BE_ALPHANUMERIC)
+    .optional(),
+});
+
 export const userVerificationSchema = z.object({
   token: z.string({ required_error: ValidationMessages.TOKEN_REQUIRED }),
 });

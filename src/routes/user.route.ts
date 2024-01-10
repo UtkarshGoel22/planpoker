@@ -6,6 +6,7 @@ import {
   logoutUser,
   registerUser,
   reverifyUser,
+  updateUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
 import {
@@ -13,6 +14,7 @@ import {
   registerUserValidation,
   reverifyUserValidation,
   tokenValidation,
+  updateUserValidation,
   verifyUserValidation,
 } from '../middlewares/user.middleware';
 
@@ -29,5 +31,7 @@ router.post('/login', loginUserValidation, loginUser);
 router.post('/logout', tokenValidation, logoutUser);
 
 router.get('/', tokenValidation, getUser);
+
+router.patch('/', tokenValidation, updateUserValidation, updateUser);
 
 export default router;

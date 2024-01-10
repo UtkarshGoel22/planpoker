@@ -7,6 +7,7 @@ import {
   validateUserLoginData,
   validateUserRegistrationData,
   validateUserReverificationData,
+  validateUserUpdationData,
   validateUserVerificationData,
 } from '../helpers/user.helper';
 import { makeResponse } from '../utils/common';
@@ -100,6 +101,16 @@ export const tokenValidation = async (req: Request, res: Response, next: NextFun
 
   req.token = token;
   req.user = await token.user;
+  next();
+};
+
+export const updateUserValidation = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    validateUserUpdationData(req.body);
+  } catch (error) {
+    return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
+  }
+
   next();
 };
 
