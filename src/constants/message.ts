@@ -25,6 +25,7 @@ export const ErrorMessages = {
   INVALID_REQUEST_DATA: 'Invalid request data',
   NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL: 'No account associated with the given email',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
+  UNAUTHORIZED_ACCESS: 'You do not have access to perform the action',
   USER_VERIFICATION_FAILED: 'User verfication failed',
 };
 
@@ -41,6 +42,7 @@ export const LogMessages = {
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
   LOGIN_SUCCESS: 'Logged in successfully',
+  LOGOUT_SUCCESS: 'Logged out successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
   VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
 };

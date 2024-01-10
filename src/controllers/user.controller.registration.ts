@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 
 import { EmailSubject } from '../constants/enums';
 import { EmailMessages, ErrorMessages, ResponseMessages } from '../constants/message';
-import { createToken } from '../entity/token/repository';
+import { createToken, findAndUpdateToken } from '../entity/token/repository';
 import { User } from '../entity/user/model';
 import { createUser, findAndUpdateUser } from '../entity/user/repository';
 import config from '../settings/config';
@@ -48,6 +48,12 @@ export const registerUser = async (req: Request, res: Response) => {
     const statusCode = error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
     return res.status(statusCode).json(makeResponse(false, error.message, error.data));
   }
+};
+
+export const logoutUser = async (req: Request, res: Response) => {
+  const currentDate = new Date();
+  await findAndUpdateToken({ id: req.token.id }, { expiredAt: currentDate, isActive: false });
+  return res.status(StatusCodes.OK).json(makeResponse(true, ResponseMessages.LOGOUT_SUCCESS));
 };
 
 export const reverifyUser = async (req: Request, res: Response) => {

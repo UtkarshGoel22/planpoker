@@ -10,6 +10,7 @@ import {
   validateUserVerificationData,
 } from '../helpers/user.helper';
 import { makeResponse } from '../utils/common';
+import { findToken } from '../entity/token/repository';
 
 export const loginUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -73,6 +74,32 @@ export const reverifyUserValidation = async (req: Request, res: Response, next: 
       .status(StatusCodes.BAD_REQUEST)
       .json(makeResponse(false, ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL, errorData));
   }
+};
+
+export const tokenValidation = async (req: Request, res: Response, next: NextFunction) => {
+  let tokenId = req.headers.authorization;
+
+  if (!tokenId) {
+    const errorData = { auth: ErrorMessages.UNAUTHORIZED_ACCESS };
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json(makeResponse(false, ErrorMessages.UNAUTHORIZED_ACCESS, errorData));
+  }
+
+  tokenId = tokenId.slice(7).trim();
+
+  const token = await findToken({ id: tokenId, isActive: true });
+  const currentDate = new Date();
+
+  if (!token || token.expiryDate <= currentDate) {
+    const errorData = { auth: ErrorMessages.UNAUTHORIZED_ACCESS };
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json(makeResponse(false, ErrorMessages.UNAUTHORIZED_ACCESS, errorData));
+  }
+
+  req.token = token;
+  next();
 };
 
 export const verifyUserValidation = async (req: Request, res: Response, next: NextFunction) => {

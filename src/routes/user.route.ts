@@ -2,6 +2,7 @@ import express from 'express';
 
 import {
   loginUser,
+  logoutUser,
   registerUser,
   reverifyUser,
   verifyUser,
@@ -10,6 +11,7 @@ import {
   loginUserValidation,
   registerUserValidation,
   reverifyUserValidation,
+  tokenValidation,
   verifyUserValidation,
 } from '../middlewares/user.middleware';
 
@@ -22,5 +24,7 @@ router.get('/verify', verifyUserValidation, verifyUser);
 router.post('/verify', reverifyUserValidation, reverifyUser);
 
 router.post('/login', loginUserValidation, loginUser);
+
+router.post('/logout', tokenValidation, logoutUser);
 
 export default router;
