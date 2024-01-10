@@ -49,6 +49,11 @@ export const findUser = async (findOptions: FindOptionsWhere<User>): Promise<Use
   return userRepository.findOne({ where: findOptions });
 };
 
+export const findUsers = async (findOptions: FindOptionsWhere<User>): Promise<User[]> => {
+  const userRepository = customGetRepository(User);
+  return userRepository.find({ where: findOptions });
+};
+
 export const saveUser = async (user: User): Promise<User> => {
   const userRepository = customGetRepository(User);
   return userRepository.save(user);

@@ -6,6 +6,7 @@ export enum DeckTypes {
 }
 
 export enum EmailSubject {
+  ADDED_TO_GROUP = 'Added to new group',
   REGISTRATION_SUCESS = 'Registered successfully!!',
   VERIFICATION_SUCCESS = 'Account verified successfully!!',
   EMAIL_VERIFICATION = 'Email verification',

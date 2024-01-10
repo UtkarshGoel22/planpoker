@@ -1,3 +1,9 @@
+export type CreateGroup = {
+  name: string;
+  admin: string;
+  members: string[];
+};
+
 export type CreateUser = {
   confirmPassword: string;
   email: string;
