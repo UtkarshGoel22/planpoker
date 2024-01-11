@@ -3,6 +3,7 @@ import express from 'express';
 
 import { Routes } from './constants/enums';
 import userRouter from './routes/user.route';
+import usersRouter from './routes/users.route';
 import config from './settings/config';
 
 class App {
@@ -19,6 +20,7 @@ class App {
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cors());
     this.app.use(Routes.USER, userRouter);
+    this.app.use(Routes.USERS, usersRouter);
   }
 }
 

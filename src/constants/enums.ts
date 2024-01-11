@@ -27,7 +27,7 @@ export enum PokerBoardStatus {
 export enum Routes {
   USER = '/user',
   USERS = '/users',
-  POKER_BOARD = '/poker-board',
+  POKER_BOARD = '/pokerboard',
 }
 
 export enum TicketTypes {

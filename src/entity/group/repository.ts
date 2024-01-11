@@ -11,7 +11,7 @@ import { Group } from './model';
 
 export const createGroup = async (data: CreateGroup): Promise<Group> => {
   const groupRepository = customGetRepository(Group);
-  const groupMembers = await findUsers({ id: In(data.members) });
+  const groupMembers = await findUsers({ where: { id: In(data.members) } });
 
   if (groupMembers.length < 2) {
     const errorData = { members: ErrorMessages.USERS_NOT_FOUND };
