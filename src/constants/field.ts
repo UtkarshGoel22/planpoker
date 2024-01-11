@@ -9,6 +9,7 @@ export const FieldNames = {
 export const FieldConstraints = {
   FIRST_NAME: { MAX: 50 },
   LAST_NAME: { MAX: 50 },
+  MEMBERS: { MIN: 2 },
   USERNAME: { MIN: 4, MAX: 30 },
   PASSWORD: { MIN: 6, MAX: 30 },
 };

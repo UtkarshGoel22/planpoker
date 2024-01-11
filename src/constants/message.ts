@@ -2,6 +2,15 @@ import config from '../settings/config';
 import { Routes } from './enums';
 
 export const EmailMessages = {
+  ADDED_TO_GROUP: (
+    groupName: string,
+    adminFirstName: string,
+    adminLastName: string,
+    adminEmail: string,
+  ) => `<body>
+  <h1> You are added to a new group ${groupName} </h1>
+  <p> ${adminFirstName} ${adminLastName} having email as ${adminEmail} added you to the group. </p>
+  </body>`,
   REGISTRATION_SUCCESS: (token: string) => `<body>
   <h1> Welcome to Plan Poker!! </h1> 
   <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
@@ -21,12 +30,14 @@ export const ErrorMessages = {
   ACCOUNT_ALREADY_EXISTS: 'Account already exists',
   ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
   ACCOUNT_NOT_VERIFIED: 'Your account in not verified. Kindly verify your account',
+  GROUP_NAME_ALREADY_EXISTS: 'Group with the given name already exists',
   INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
   INVALID_REQUEST_DATA: 'Invalid request data',
   NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL: 'No account associated with the given email',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
   UNAUTHORIZED_ACCESS: 'You do not have access to perform the action',
   USER_VERIFICATION_FAILED: 'User verfication failed',
+  USERS_NOT_FOUND: 'Users you are trying to add do not exist',
 };
 
 export const LogMessages = {
@@ -42,6 +53,7 @@ export const LogMessages = {
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
   GET_USER_SUCCESS: 'Fetched user details successfully',
+  GROUP_CREATION_SUCCESS: 'Group created successfully',
   LOGIN_SUCCESS: 'Logged in successfully',
   LOGOUT_SUCCESS: 'Logged out successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
@@ -50,11 +62,17 @@ export const ResponseMessages = {
 };
 
 export const ValidationMessages = {
+  ADMIN_REQUIRED: 'Admin is a required field',
   EMAIL_REQUIRED: 'Email is a required field',
   FIRST_NAME_MAX_LENGTH: 'First name length can be upto 50',
   FIRST_NAME_REQUIRED: 'First name is a required field',
+  GROUP_NAME_REQUIRED: 'Group name is a required field',
+  GROUP_NAME_MIN_LENGTH: 'Group name length must be at least 4',
+  GROUP_NAME_MAX_LENGTH: 'Group name length can be upto 30',
+  GROUP_NAME_MUST_BE_ALPHANUMERIC: 'Group name must be alphanumeric',
   INVALID_EMAIL: 'Please enter a valid email address',
   LAST_NAME_MAX_LENGTH: 'Last name length can be upto 50',
+  MINIMUM_MEMBERS: 'Minimum 2 members required',
   PASSWORD_DOES_NOT_MATCH: 'Password does not match',
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
