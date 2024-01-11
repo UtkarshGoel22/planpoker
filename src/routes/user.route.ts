@@ -1,12 +1,10 @@
 import express from 'express';
 
+import { getUser, updateUser } from '../controllers/user.controller';
+import { loginUser, logoutUser } from '../controllers/user.controller.auth';
 import {
-  getUser,
-  loginUser,
-  logoutUser,
   registerUser,
   reverifyUser,
-  updateUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
 import {

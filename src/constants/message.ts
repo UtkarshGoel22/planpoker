@@ -60,6 +60,7 @@ export const ResponseMessages = {
   LOGOUT_SUCCESS: 'Logged out successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
   UPDATE_USER_SUCCESS: 'User updated successfully',
+  USER_SEARCH_SUCCESS: 'Fetched users successfully',
   VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
 };
 

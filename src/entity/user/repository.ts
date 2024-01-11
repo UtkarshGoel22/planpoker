@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { FindOptionsWhere, UpdateResult } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { ErrorMessages } from '../../constants/message';
@@ -24,7 +24,6 @@ export const createUser = async (data: CreateUser): Promise<User> => {
   try {
     return await userRepository.save(newUser);
   } catch (error) {
-    console.log('Error while saving user:', error);
     const errorData: { [key: string]: string } = {
       duplicateEntry: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
     };
@@ -49,9 +48,9 @@ export const findUser = async (findOptions: FindOptionsWhere<User>): Promise<Use
   return userRepository.findOne({ where: findOptions });
 };
 
-export const findUsers = async (findOptions: FindOptionsWhere<User>): Promise<User[]> => {
+export const findUsers = async (findOptions: FindManyOptions<User>): Promise<User[]> => {
   const userRepository = customGetRepository(User);
-  return userRepository.find({ where: findOptions });
+  return userRepository.find(findOptions);
 };
 
 export const saveUser = async (user: User): Promise<User> => {
