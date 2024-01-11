@@ -4,7 +4,8 @@ import { Like } from 'typeorm';
 
 import { EmailSubject } from '../constants/enums';
 import { EmailMessages, ResponseMessages } from '../constants/message';
-import { createGroup, findGroups } from '../entity/group/repository';
+import { createGroup, findGroups, findGroupsAssociatedToUser } from '../entity/group/repository';
+import { GroupDetails, UserGroupDetails } from '../types';
 import { makeResponse } from '../utils/common';
 import { sendBulkMails } from '../utils/notification';
 
@@ -29,13 +30,34 @@ export const createUserGroup = async (req: Request, res: Response) => {
   }
 };
 
-export const searchGroup = async (req: Request, res: Response) => {
-  const searchKey = req.query.searchKey;
-  const limit = Number(req.query.limit);
-  const groups = await findGroups(
-    { isActive: true, name: Like(`${searchKey.toString()}%`) },
-    limit,
+export const getGroupsAssociatedToUser = async (req: Request, res: Response) => {
+  const groups: GroupDetails[] = await findGroupsAssociatedToUser(req.user);
+  const userGroupsData: { [key: string]: UserGroupDetails } = {};
+
+  for (const group of groups) {
+    if (!userGroupsData[group.id]) {
+      userGroupsData[group.id] = {
+        admin: group.admin,
+        countOfMembers: group.countOfMembers,
+        id: group.id,
+        members: [],
+        name: group.name,
+      };
+    }
+    userGroupsData[group.id].members.push(group.member);
+  }
+
+  res.status(StatusCodes.OK).json(
+    makeResponse(true, ResponseMessages.GET_GROUPS_ASSOCIATED_TO_USER_SUCCESS, {
+      groups: Object.values(userGroupsData),
+    }),
   );
+};
+
+export const searchGroup = async (req: Request, res: Response) => {
+  const searchKey = req.query.searchKey.toString();
+  const limit = Number(req.query.limit);
+  const groups = await findGroups({ isActive: true, name: Like(`${searchKey}%`) }, limit);
   const groupsData = groups
     .map((group) => {
       return {

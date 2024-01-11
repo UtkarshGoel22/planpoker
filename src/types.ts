@@ -19,6 +19,22 @@ export type CustomResponse = {
   data: object | undefined;
 };
 
+export type GroupDetails = {
+  id: string;
+  name: string;
+  admin: string;
+  countOfMembers: number;
+  member?: string;
+};
+
+export type UserGroupDetails = {
+  admin: string;
+  countOfMembers: number;
+  id: string;
+  members: string[];
+  name: string;
+};
+
 export type ValidationIssue = {
   path: string[];
   message: string;

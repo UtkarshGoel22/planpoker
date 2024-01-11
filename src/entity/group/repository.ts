@@ -4,8 +4,9 @@ import { FindOptionsWhere, In } from 'typeorm';
 import { ErrorMessages } from '../../constants/message';
 import config from '../../settings/config';
 import { CreateGroup } from '../../types';
-import { findUsers } from '../user/repository';
 import customGetRepository from '../../utils/db';
+import { User } from '../user/model';
+import { findUsers } from '../user/repository';
 import { Group } from './model';
 
 export const createGroup = async (data: CreateGroup): Promise<Group> => {
@@ -55,4 +56,25 @@ export const findGroups = async (
     select: ['admin', 'countOfMembers', 'id', 'name'],
     take: limit,
   });
+};
+
+export const findGroupsAssociatedToUser = async (user: User) => {
+  const groups = await user.groups;
+  const groupIds = groups.map((group) => group.id);
+  const groupRepository = customGetRepository(Group);
+  const groupsData = await groupRepository
+    .createQueryBuilder('group')
+    .where({ id: In(groupIds) })
+    .select('name')
+    .leftJoin(User, 'user', 'user.id = admin')
+    .leftJoin('group.users', 'members')
+    .addSelect('members.username', 'member')
+    .addSelect('group.id', 'id')
+    .addSelect('user.username', 'admin')
+    .addSelect('name')
+    .addSelect('count_of_members', 'countOfMembers')
+    .addSelect('')
+    .orderBy('group.updated_at', 'DESC')
+    .getRawMany();
+  return groupsData;
 };

@@ -52,6 +52,7 @@ export const LogMessages = {
 
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
+  GET_GROUPS_ASSOCIATED_TO_USER_SUCCESS: 'Fetched groups associated to the user successfully',
   GET_USER_SUCCESS: 'Fetched user details successfully',
   GROUP_CREATION_SUCCESS: 'Group created successfully',
   GROUP_SEARCH_SUCCESS: 'Groups searched successfully',
