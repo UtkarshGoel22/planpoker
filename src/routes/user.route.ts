@@ -9,7 +9,11 @@ import {
   updateUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
-import { createUserGroup, searchGroup } from '../controllers/group.controller';
+import {
+  createUserGroup,
+  getGroupsAssociatedToUser,
+  searchGroup,
+} from '../controllers/group.controller';
 import {
   loginUserValidation,
   registerUserValidation,
@@ -40,5 +44,7 @@ router.patch('/', tokenValidation, updateUserValidation, updateUser);
 router.post('/group', tokenValidation, createGroupValidation, createUserGroup);
 
 router.get('/group', searchValidation, searchGroup);
+
+router.get('/groups', tokenValidation, getGroupsAssociatedToUser);
 
 export default router;
