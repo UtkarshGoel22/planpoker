@@ -1,5 +1,6 @@
 import { ErrorMessages, ValidationMessages } from '../../src/constants/message';
 import { validateUserRegistrationData } from '../../src/helpers/user.helper';
+import { TestData } from '../test.data';
 
 export const testUserHelpers = () => {
   describe('Test validateUserRegistrationData function', () => {
@@ -21,16 +22,9 @@ export const testUserHelpers = () => {
     });
 
     test('Valid data', () => {
-      expect(
-        validateUserRegistrationData({
-          firstName: 'firstname',
-          lastName: 'lastname',
-          username: 'testuser',
-          email: 'testuser@example.com',
-          password: 'password',
-          confirmPassword: 'password',
-        }),
-      ).toEqual(undefined);
+      expect(validateUserRegistrationData(TestData.USER_REGISTERATION_REQUEST_DATA)).toEqual(
+        TestData.USER_REGISTERATION_REQUEST_DATA,
+      );
     });
   });
 };

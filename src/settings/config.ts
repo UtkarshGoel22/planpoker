@@ -17,6 +17,7 @@ const config = {
   },
   JWT: { EXPIRY: process.env.JWT_EXPIRY, SECRECT: process.env.JWT_SECRET },
   NODE_ENV: process.env.NODE_ENV || Environments.DEV,
+  SEARCH: { LIMIT: 10 },
 };
 
 export default config;

@@ -26,11 +26,11 @@ export const makeResponse = (
 export const validateData = (
   schema: z.ZodEffects<z.ZodObject<any>> | z.ZodObject<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
   data: object,
-): { [key: string]: string } | null => {
-  let errorData = null;
+): { [key: string]: string } => {
   const result = schema.safeParse(data);
   if (!result.success) {
-    errorData = formatValidationErrors(result['error'].issues);
+    const errorData = formatValidationErrors(result['error'].issues);
+    throw { data: errorData };
   }
-  return errorData;
+  return result.data;
 };

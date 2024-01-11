@@ -1,6 +1,5 @@
 import express from 'express';
 
-import { createGroupValidation } from '../middlewares/group.middleware';
 import {
   getUser,
   loginUser,
@@ -10,6 +9,7 @@ import {
   updateUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
+import { createUserGroup, searchGroup } from '../controllers/group.controller';
 import {
   loginUserValidation,
   registerUserValidation,
@@ -18,7 +18,8 @@ import {
   updateUserValidation,
   verifyUserValidation,
 } from '../middlewares/user.middleware';
-import { createUserGroup } from '../controllers/group.controller';
+import { createGroupValidation } from '../middlewares/group.middleware';
+import { searchValidation } from '../middlewares/search.middleware';
 
 const router: express.Router = express.Router();
 
@@ -37,5 +38,7 @@ router.get('/', tokenValidation, getUser);
 router.patch('/', tokenValidation, updateUserValidation, updateUser);
 
 router.post('/group', tokenValidation, createGroupValidation, createUserGroup);
+
+router.get('/group', searchValidation, searchGroup);
 
 export default router;

@@ -15,7 +15,7 @@ import { findToken } from '../entity/token/repository';
 
 export const loginUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    validateUserLoginData(req.body);
+    req.body = validateUserLoginData(req.body);
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
@@ -40,7 +40,7 @@ export const loginUserValidation = async (req: Request, res: Response, next: Nex
 
 export const registerUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    validateUserRegistrationData(req.body);
+    req.body = validateUserRegistrationData(req.body);
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
@@ -59,7 +59,7 @@ export const registerUserValidation = async (req: Request, res: Response, next: 
 
 export const reverifyUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    validateUserReverificationData(req.body);
+    req.body = validateUserReverificationData(req.body);
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
@@ -106,7 +106,7 @@ export const tokenValidation = async (req: Request, res: Response, next: NextFun
 
 export const updateUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    validateUserUpdationData(req.body);
+    req.body = validateUserUpdationData(req.body);
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
@@ -116,7 +116,7 @@ export const updateUserValidation = async (req: Request, res: Response, next: Ne
 
 export const verifyUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    validateUserVerificationData(req.query);
+    req.query = validateUserVerificationData(req.query);
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
