@@ -43,13 +43,15 @@ export const testCommonUtil = () => {
     const testSchema = z.object({ a: z.string().max(4, 'Length can be upto 4') });
 
     test('Validation errors absent', () => {
-      expect(common.validateData(testSchema, { a: 'abc' })).toEqual(null);
+      expect(common.validateData(testSchema, { a: 'abc' })).toEqual({ a: 'abc' });
     });
 
     test('Validation errors present', () => {
-      expect(common.validateData(testSchema, { a: 'abcde' })).toEqual({
-        a: 'Length can be upto 4',
-      });
+      try {
+        common.validateData(testSchema, { a: 'abcde' });
+      } catch (error) {
+        expect(error).toEqual({ data: { a: 'Length can be upto 4' } });
+      }
     });
   });
 };

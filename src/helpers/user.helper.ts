@@ -9,36 +9,41 @@ import {
 import { validateData } from '../utils/common';
 
 export const validateUserLoginData = (data: object) => {
-  const errorData: { [key: string]: string } | null = validateData(loginSchema, data);
-  if (errorData) {
-    throw { message: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD, data: errorData };
+  try {
+    return validateData(loginSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD, data: error.data };
   }
 };
 
 export const validateUserRegistrationData = (data: object) => {
-  const errorData: { [key: string]: string } | null = validateData(registrationSchema, data);
-  if (errorData) {
-    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: errorData };
+  try {
+    return validateData(registrationSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
 };
 
 export const validateUserReverificationData = (data: object) => {
-  const errorData: { [key: string]: string } | null = validateData(userReverificationSchema, data);
-  if (errorData) {
-    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: errorData };
+  try {
+    return validateData(userReverificationSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
 };
 
 export const validateUserUpdationData = (data: object) => {
-  const errorData: { [key: string]: string } | null = validateData(userUpdationSchema, data);
-  if (errorData) {
-    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: errorData };
+  try {
+    return validateData(userUpdationSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
 };
 
 export const validateUserVerificationData = (data: object) => {
-  const errorData: { [key: string]: string } | null = validateData(userVerificationSchema, data);
-  if (errorData) {
-    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: errorData };
+  try {
+    return validateData(userVerificationSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
 };
