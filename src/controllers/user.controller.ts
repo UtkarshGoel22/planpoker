@@ -27,10 +27,10 @@ export const searchUsers = async (req: Request, res: Response) => {
   const findCondition = { isActive: true, isVerified: true };
   const findOptions: FindManyOptions<User> = {
     where: [
-      { ...findCondition, username: Like(searchKey) },
-      { ...findCondition, email: Like(searchKey) },
-      { ...findCondition, firstName: Like(searchKey) },
-      { ...findCondition, lastName: Like(searchKey) },
+      { ...findCondition, username: Like(`${searchKey}%`) },
+      { ...findCondition, email: Like(`${searchKey}%`) },
+      { ...findCondition, firstName: Like(`${searchKey}%`) },
+      { ...findCondition, lastName: Like(`${searchKey}%`) },
     ],
     select: ['email', 'firstName', 'lastName', 'id', 'username'],
     take: limit,
