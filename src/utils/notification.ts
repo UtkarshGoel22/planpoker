@@ -4,9 +4,9 @@ import { LogMessages } from '../constants/message';
 import config from '../settings/config';
 
 export const sendBulkMails = async (
-  email_subject: string,
-  email_body: string,
-  reciever_emails: string[],
+  emailSubject: string,
+  emailBody: string,
+  receiverEmails: string[],
 ) => {
   const transporter = nodemailer.createTransport({
     service: config.EMAIL.SERIVCE_TYPE,
@@ -20,9 +20,9 @@ export const sendBulkMails = async (
 
   const mailOptions: nodemailer.SendMailOptions = {
     from: config.EMAIL.SENDER_MAIL,
-    bcc: reciever_emails,
-    subject: email_subject,
-    html: email_body,
+    bcc: receiverEmails,
+    subject: emailSubject,
+    html: emailBody,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -34,11 +34,7 @@ export const sendBulkMails = async (
   });
 };
 
-export const sendMail = async (
-  email_subject: string,
-  email_body: string,
-  reciever_email: string,
-) => {
+export const sendMail = async (emailSubject: string, emailBody: string, receiverEmail: string) => {
   const transporter = nodemailer.createTransport({
     service: config.EMAIL.SERIVCE_TYPE,
     host: config.EMAIL.HOST,
@@ -51,9 +47,9 @@ export const sendMail = async (
 
   const mailOptions: nodemailer.SendMailOptions = {
     from: config.EMAIL.SENDER_MAIL,
-    to: reciever_email,
-    subject: email_subject,
-    html: email_body,
+    to: receiverEmail,
+    subject: emailSubject,
+    html: emailBody,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

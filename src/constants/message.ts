@@ -11,6 +11,16 @@ export const EmailMessages = {
   <h1> You are added to a new group ${groupName} </h1>
   <p> ${adminFirstName} ${adminLastName} having email as ${adminEmail} added you to the group. </p>
   </body>`,
+  INVITE_FOR_SIGN_UP: (pokerboardName: string) => `<body>
+  <h1> Invitation to join ${pokerboardName} pokerboard </h1> 
+  <p> You are invited to join the ${pokerboardName} pokerboard game </p>
+  <span> Please signup and accept the invitation to continue: ${config.APP_URL}/signup </span>
+  </body>`,
+  POKERBOARD_INVITATION: (pokerboardName: string, pokerboardId: string) => `<body>
+  <h1> Invitation to join ${pokerboardName} pokerboard </h1>
+  <p> You are invited to join the ${pokerboardName} pokerboard game </p>
+  <span> Invitation Link ${config.APP_URL}/${Routes.POKER_BOARD}/invite?pokerboardId=${pokerboardId} </span>
+  </body>`,
   REGISTRATION_SUCCESS: (token: string) => `<body>
   <h1> Welcome to Plan Poker!! </h1> 
   <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
@@ -58,6 +68,7 @@ export const ResponseMessages = {
   GROUP_SEARCH_SUCCESS: 'Groups searched successfully',
   LOGIN_SUCCESS: 'Logged in successfully',
   LOGOUT_SUCCESS: 'Logged out successfully',
+  POKERBOARD_CREATE_SUCCESS: 'Pokerboard created successfully',
   REGISTRATION_SUCCESS: 'Account created successfully',
   UPDATE_USER_SUCCESS: 'User updated successfully',
   USER_SEARCH_SUCCESS: 'Fetched users successfully',
@@ -66,6 +77,7 @@ export const ResponseMessages = {
 
 export const ValidationMessages = {
   ADMIN_REQUIRED: 'Admin is a required field',
+  DECK_TYPE_REQUIRED: 'Deck type is required field',
   EMAIL_REQUIRED: 'Email is a required field',
   FIRST_NAME_MAX_LENGTH: 'First name length can be upto 50',
   FIRST_NAME_REQUIRED: 'First name is a required field',
@@ -73,18 +85,27 @@ export const ValidationMessages = {
   GROUP_NAME_MIN_LENGTH: 'Group name length must be at least 4',
   GROUP_NAME_MAX_LENGTH: 'Group name length can be upto 30',
   GROUP_NAME_MUST_BE_ALPHANUMERIC: 'Group name must be alphanumeric',
+  GROUPS_REQUIRED: 'Groups is a required field',
+  ID_REQUIRED: 'Id is a required field',
   INVALID_EMAIL: 'Please enter a valid email address',
   LAST_NAME_MAX_LENGTH: 'Last name length can be upto 50',
   LIMIT_SHOULD_BE_A_NATURAL_NUMBER: 'Limit must be atleast 1',
+  MANAGER_REQUIRED: 'Manager is required field',
   MINIMUM_MEMBERS: 'Minimum 2 members required',
   PASSWORD_DOES_NOT_MATCH: 'Password does not match',
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
   PASSWORD_REQUIRED: 'Password is a required field',
+  POKERBOARD_MIN_MEMBERS: 'Add at least one user or group to create the pokerboard',
+  POKERBOARD_NAME_MAX_LENGTH: 'Pokerboard name length can be upto 30',
+  POKERBOARD_NAME_MIN_LENGTH: 'Pokerboard name length must be atleast 6',
+  POKERBOARD_NAME_MUST_BE_ALPHANUMERIC: 'Pokerboard name must be alphanumeric',
+  POKERBOARD_NAME_REQUIRED: 'Pokerboard name is required field',
   TOKEN_REQUIRED: 'Token is a required field',
   USERNAME_ALREADY_EXISTS: 'Username already exists',
   USERNAME_MAX_LENGTH: 'Username length can be upto 30',
   USERNAME_MIN_LENGTH: 'Username length must be atleast 4',
   USERNAME_MUST_BE_ALPHANUMERIC: 'Username must be alphanumeric',
   USERNAME_REQUIRED: 'Username is a required field',
+  USERS_REQUIRED: 'Users is a required field',
 };

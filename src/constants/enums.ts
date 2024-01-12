@@ -7,9 +7,11 @@ export enum DeckTypes {
 
 export enum EmailSubject {
   ADDED_TO_GROUP = 'Added to new group',
-  REGISTRATION_SUCESS = 'Registered successfully!!',
-  VERIFICATION_SUCCESS = 'Account verified successfully!!',
   EMAIL_VERIFICATION = 'Email verification',
+  POKERBOARD_INVITE = 'Invitation to join pokerboard',
+  REGISTRATION_SUCESS = 'Registered successfully!!',
+  SIGN_UP_TO_JOIN_POKERBOARD = 'Sign up to join pokerboard',
+  VERIFICATION_SUCCESS = 'Account verified successfully!!',
 }
 
 export enum InviteStatus {
