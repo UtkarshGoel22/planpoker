@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 
 import { Routes } from './constants/enums';
+import pokerboardRouter from './routes/pokerboard.route';
 import userRouter from './routes/user.route';
 import usersRouter from './routes/users.route';
 import config from './settings/config';
@@ -21,6 +22,7 @@ class App {
     this.app.use(cors());
     this.app.use(Routes.USER, userRouter);
     this.app.use(Routes.USERS, usersRouter);
+    this.app.use(Routes.POKERBOARD, pokerboardRouter);
   }
 }
 

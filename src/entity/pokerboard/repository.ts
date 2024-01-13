@@ -1,18 +1,18 @@
 import { FindManyOptions, In } from 'typeorm';
 
-import customGetRepository from '../../utils/db';
-import { CreatePokerboard } from '../../types';
-import { Group } from '../group/model';
-import { findGroups } from '../group/repository';
-import { User } from '../user/model';
-import { findUsers } from '../user/repository';
-import { Pokerboard } from './model';
-import { PokerBoardStatus } from '../../constants/enums';
-import { createUserPokerBoards } from '../userPokerboard/repository';
+import { PokerboardStatus } from '../../constants/enums';
 import {
   sendInvitationMailToUnregisteredUsers,
   sendInvitationMailToVerifiedUsers,
 } from '../../helpers/pokerboard.helper';
+import { CreatePokerboard } from '../../types';
+import customGetRepository from '../../utils/db';
+import { Group } from '../group/model';
+import { findGroups } from '../group/repository';
+import { User } from '../user/model';
+import { findUsers } from '../user/repository';
+import { createUserPokerboards } from '../userPokerboard/repository';
+import { Pokerboard } from './model';
 
 export const createPokerboard = async (data: CreatePokerboard) => {
   const usersSet = new Set<string>();
@@ -44,17 +44,24 @@ export const createPokerboard = async (data: CreatePokerboard) => {
     manager: data.manager,
     name: data.name,
     deckType: data.deckType,
-    status: PokerBoardStatus.CREATED,
+    status: PokerboardStatus.CREATED,
   });
   newPokerboard.groups = Promise.resolve(groups);
   await pokerboardRepository.save(newPokerboard);
 
   const findUsersOptions: FindManyOptions<User> = { where: { id: In(Array.from(usersSet)) } };
   const users = await findUsers(findUsersOptions);
-  await createUserPokerBoards(users, newPokerboard);
+  await createUserPokerboards(users, [newPokerboard]);
 
   sendInvitationMailToVerifiedUsers(users, newPokerboard);
   sendInvitationMailToUnregisteredUsers(unregisteredUserEmails, newPokerboard);
 
   return newPokerboard;
+};
+
+export const findPokerboards = async (
+  findOptions: FindManyOptions<Pokerboard>,
+): Promise<Pokerboard[]> => {
+  const pokerboardRepository = customGetRepository(Pokerboard);
+  return pokerboardRepository.find(findOptions);
 };

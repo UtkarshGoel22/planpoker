@@ -19,7 +19,7 @@ export const EmailMessages = {
   POKERBOARD_INVITATION: (pokerboardName: string, pokerboardId: string) => `<body>
   <h1> Invitation to join ${pokerboardName} pokerboard </h1>
   <p> You are invited to join the ${pokerboardName} pokerboard game </p>
-  <span> Invitation Link ${config.APP_URL}/${Routes.POKER_BOARD}/invite?pokerboardId=${pokerboardId} </span>
+  <span> Invitation Link ${config.APP_URL}/${Routes.POKERBOARD}/invite?pokerboardId=${pokerboardId} </span>
   </body>`,
   REGISTRATION_SUCCESS: (token: string) => `<body>
   <h1> Welcome to Plan Poker!! </h1> 
@@ -87,6 +87,7 @@ export const ValidationMessages = {
   GROUP_NAME_MUST_BE_ALPHANUMERIC: 'Group name must be alphanumeric',
   GROUPS_REQUIRED: 'Groups is a required field',
   ID_REQUIRED: 'Id is a required field',
+  INVALID_DECK_TYPE: 'Invalid deck type. Deck type must be one of [SERIAL, EVEN, ODD, FIBONACCI]',
   INVALID_EMAIL: 'Please enter a valid email address',
   LAST_NAME_MAX_LENGTH: 'Last name length can be upto 50',
   LIMIT_SHOULD_BE_A_NATURAL_NUMBER: 'Limit must be atleast 1',

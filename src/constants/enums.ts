@@ -20,7 +20,7 @@ export enum InviteStatus {
   REJECTED = 'REJECTED',
 }
 
-export enum PokerBoardStatus {
+export enum PokerboardStatus {
   CREATED = 'CREATED',
   STARTED = 'GAME_STARTED',
   ENDED = 'GAME_ENDED',
@@ -29,7 +29,7 @@ export enum PokerBoardStatus {
 export enum Routes {
   USER = '/user',
   USERS = '/users',
-  POKER_BOARD = '/pokerboard',
+  POKERBOARD = '/pokerboard',
 }
 
 export enum TicketTypes {

@@ -25,7 +25,17 @@ export const createPokerboardSchema = z
       .string({ required_error: ValidationMessages.MANAGER_REQUIRED })
       .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.MANAGER_REQUIRED),
     deckType: z.enum([DeckTypes.EVEN, DeckTypes.FIBONACCI, DeckTypes.ODD, DeckTypes.SERIAL], {
-      required_error: ValidationMessages.DECK_TYPE_REQUIRED,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      errorMap: (issue, _ctx) => {
+        switch (issue.code) {
+          case 'invalid_type':
+            return { message: ValidationMessages.INVALID_DECK_TYPE };
+          case 'invalid_enum_value':
+            return { message: ValidationMessages.INVALID_DECK_TYPE };
+          default:
+            return { message: ValidationMessages.DECK_TYPE_REQUIRED };
+        }
+      },
     }),
     users: z.array(userSchema, { required_error: ValidationMessages.USERS_REQUIRED }),
     groups: z.array(z.string().min(FieldConstraints.REQUIRED_FIELD), {
@@ -33,6 +43,6 @@ export const createPokerboardSchema = z
     }),
   })
   .refine((schema) => schema.users.length > 0 || schema.groups.length > 0, {
-    message: ValidationMessages.PASSWORD_DOES_NOT_MATCH,
+    message: ValidationMessages.MINIMUM_MEMBERS,
     path: [FieldNames.MIN_MEMBERS],
   });
