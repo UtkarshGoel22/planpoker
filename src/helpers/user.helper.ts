@@ -24,7 +24,10 @@ export const updatePendingInvitesToPokerboards = async (email: string) => {
   }
 
   const pokerboards = await findPokerboards({
-    where: { id: In(invites.map((i) => i.pokerboardId)), status: Not(PokerboardStatus.ENDED) },
+    where: {
+      id: In(invites.map((invite) => invite.pokerboardId)),
+      status: Not(PokerboardStatus.ENDED),
+    },
   });
   await createUserPokerboards([user], pokerboards);
   await updateInvites({ id: In(invites.map((invite) => invite.id)) }, { isVerified: true });

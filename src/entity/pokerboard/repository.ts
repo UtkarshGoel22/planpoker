@@ -1,5 +1,6 @@
 import { FindManyOptions, In } from 'typeorm';
 
+import { UNREGISTERED } from '../../constants/common';
 import { PokerboardStatus } from '../../constants/enums';
 import {
   sendInvitationMailToUnregisteredUsers,
@@ -19,7 +20,7 @@ export const createPokerboard = async (data: CreatePokerboard) => {
   const unregisteredUserEmails: string[] = [];
 
   data.users.forEach((user) => {
-    if (user.id === 'unregistered') {
+    if (user.id === UNREGISTERED) {
       unregisteredUserEmails.push(user.email);
     } else {
       usersSet.add(user.id);
