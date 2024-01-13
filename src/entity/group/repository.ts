@@ -1,8 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
-import { FindOptionsWhere, In } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, In } from 'typeorm';
 
 import { ErrorMessages } from '../../constants/message';
-import config from '../../settings/config';
 import { CreateGroup } from '../../types';
 import customGetRepository from '../../utils/db';
 import { User } from '../user/model';
@@ -46,16 +45,9 @@ export const findGroup = async (findOptions: FindOptionsWhere<Group>): Promise<G
   return groupRepository.findOne({ where: findOptions });
 };
 
-export const findGroups = async (
-  findOptions: FindOptionsWhere<Group>,
-  limit: number = config.SEARCH.LIMIT,
-): Promise<Group[]> => {
+export const findGroups = async (findOptions: FindManyOptions<Group>): Promise<Group[]> => {
   const groupRepository = customGetRepository(Group);
-  return groupRepository.find({
-    where: findOptions,
-    select: ['admin', 'countOfMembers', 'id', 'name'],
-    take: limit,
-  });
+  return groupRepository.find(findOptions);
 };
 
 export const findGroupsAssociatedToUser = async (user: User) => {

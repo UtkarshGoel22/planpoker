@@ -6,6 +6,7 @@ import { EmailSubject } from '../constants/enums';
 import { EmailMessages, ErrorMessages, ResponseMessages } from '../constants/message';
 import { User } from '../entity/user/model';
 import { createUser, findAndUpdateUser } from '../entity/user/repository';
+import { updatePendingInvitesToPokerboards } from '../helpers/user.helper';
 import config from '../settings/config';
 import { hashPassword } from '../utils/auth';
 import { makeResponse } from '../utils/common';
@@ -53,12 +54,12 @@ export const verifyUser = async (req: Request, res: Response) => {
         .status(StatusCodes.UNAUTHORIZED)
         .json(makeResponse(false, ErrorMessages.USER_VERIFICATION_FAILED, errorData));
     } else {
-      const id: string = decoded['id'];
       const email: string = decoded['email'];
-      const result = await findAndUpdateUser({ id: id, isVerified: false }, { isVerified: true });
+      const result = await findAndUpdateUser({ email, isVerified: false }, { isVerified: true });
 
       if (result.affected) {
         sendMail(EmailSubject.VERIFICATION_SUCCESS, EmailMessages.VERIFICATION_SUCCESS, email);
+        updatePendingInvitesToPokerboards(email);
         return res
           .status(StatusCodes.OK)
           .json(makeResponse(true, ResponseMessages.ACCOUNT_VERIFICATION_SUCCESS));

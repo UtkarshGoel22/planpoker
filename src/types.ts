@@ -1,7 +1,17 @@
+import { DeckTypes } from './constants/enums';
+
 export type CreateGroup = {
   name: string;
   admin: string;
   members: string[];
+};
+
+export type CreatePokerboard = {
+  name: string;
+  manager: string;
+  deckType: DeckTypes.EVEN | DeckTypes.FIBONACCI | DeckTypes.ODD | DeckTypes.SERIAL;
+  users: { id: string; email: string }[];
+  groups: string[];
 };
 
 export type CreateUser = {

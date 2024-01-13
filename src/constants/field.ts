@@ -1,9 +1,7 @@
 export const FieldNames = {
-  FIRST_NAME: 'First Name',
-  LAST_NAME: 'Last Name',
-  USERNAME: 'Username',
-  EMAIL: 'Email',
-  PASSWORD: 'Password',
+  DECK_TYPE: 'deckType',
+  PASSWORD: 'password',
+  MIN_MEMBERS: 'minMembers',
 };
 
 export const FieldConstraints = {
@@ -12,4 +10,6 @@ export const FieldConstraints = {
   MEMBERS: { MIN: 2 },
   USERNAME: { MIN: 4, MAX: 30 },
   PASSWORD: { MIN: 6, MAX: 30 },
+  POKERBOARD_NAME: { MIN: 4, MAX: 30 },
+  REQUIRED_FIELD: 1,
 };

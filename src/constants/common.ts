@@ -28,3 +28,5 @@ export const TableNames = {
   USER_POKERBOARD: 'user_pokerboard',
   USER_TICKET: 'user_ticket',
 };
+
+export const UNREGISTERED = 'unregistered';

@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { ColumnNames } from '../../constants/common';
-import { DeckTypes, PokerBoardStatus } from '../../constants/enums';
+import { DeckTypes, PokerboardStatus } from '../../constants/enums';
 import { Group } from '../group/model';
 import { UserInviteToPokerboard } from '../pokerboardInvite/model';
 import { Ticket } from '../ticket/model';
@@ -31,7 +31,7 @@ export class Pokerboard {
   deckType: DeckTypes;
 
   @Column({ name: ColumnNames.STATUS })
-  status: PokerBoardStatus;
+  status: PokerboardStatus;
 
   @Column({ default: true, name: ColumnNames.IS_ACTIVE })
   isActive: boolean;

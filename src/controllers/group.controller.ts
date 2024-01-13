@@ -1,9 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
-import { Like } from 'typeorm';
+import { FindManyOptions, Like } from 'typeorm';
 
 import { EmailSubject } from '../constants/enums';
 import { EmailMessages, ResponseMessages } from '../constants/message';
+import { Group } from '../entity/group/model';
 import { createGroup, findGroups, findGroupsAssociatedToUser } from '../entity/group/repository';
 import { GroupDetails, UserGroupDetails } from '../types';
 import { makeResponse } from '../utils/common';
@@ -57,7 +58,12 @@ export const getGroupsAssociatedToUser = async (req: Request, res: Response) => 
 export const searchGroup = async (req: Request, res: Response) => {
   const searchKey = req.query.searchKey.toString();
   const limit = Number(req.query.limit);
-  const groups = await findGroups({ isActive: true, name: Like(`${searchKey}%`) }, limit);
+  const findOptions: FindManyOptions<Group> = {
+    where: { isActive: true, name: Like(`${searchKey}%`) },
+    select: ['admin', 'countOfMembers', 'id', 'name'],
+    take: limit,
+  };
+  const groups = await findGroups(findOptions);
   const groupsData = groups
     .map((group) => {
       return {
