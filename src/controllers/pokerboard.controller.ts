@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { ErrorMessages, ResponseMessages } from '../constants/message';
-import { ImportByType } from '../constants/enums';
+import { ImportByType, InviteStatus } from '../constants/enums';
 import { createPokerboard } from '../entity/pokerboard/repository';
+import { findUserPokerboard, saveUserPokerboard } from '../entity/userPokerboard/repository';
 import {
   importTicketsById,
   importTicketsByJQL,
@@ -11,6 +12,40 @@ import {
 } from '../helpers/pokerboard.helper';
 import { makeResponse } from '../utils/common';
 import { setImportTicketResposneMessage } from '../utils/jira';
+
+export const acceptPokerboardInvite = async (req: Request, res: Response) => {
+  const { pokerboardId } = req.query;
+  const userId = req.user.id;
+  const userPokerboard = await findUserPokerboard({
+    where: { pokerboardId: pokerboardId.toString(), userId },
+  });
+
+  if (!userPokerboard) {
+    const errorData = { invite: ErrorMessages.NOT_INVITED_TO_POKERBOARD };
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json(makeResponse(false, ErrorMessages.NOT_INVITED_TO_POKERBOARD, errorData));
+  }
+
+  if (
+    userPokerboard.inviteStatus === InviteStatus.ACCEPTED ||
+    userPokerboard.inviteStatus === InviteStatus.REJECTED
+  ) {
+    const message =
+      userPokerboard.inviteStatus === InviteStatus.ACCEPTED
+        ? ErrorMessages.INVITE_ALREADY_ACCEPTED
+        : ErrorMessages.INVITE_ALREADY_REJECTED;
+    const errorData = { invite: message };
+    return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, message, errorData));
+  }
+
+  userPokerboard.inviteStatus = InviteStatus.ACCEPTED;
+  await saveUserPokerboard(userPokerboard);
+
+  return res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.ACCEPT_POKERBOARD_INVITE_SUCCESS));
+};
 
 export const createUserPokerboard = async (req: Request, res: Response) => {
   const pokerboard = await createPokerboard(req.body);

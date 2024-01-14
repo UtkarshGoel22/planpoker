@@ -14,6 +14,10 @@ const userSchema = z.object({
     .email(ValidationMessages.INVALID_EMAIL),
 });
 
+export const acceptPokerboardInviteSchema = z.object({
+  pokerboardId: z.string({ required_error: ValidationMessages.POKERBOARD_NAME_REQUIRED }),
+});
+
 export const createPokerboardSchema = z
   .object({
     name: z
