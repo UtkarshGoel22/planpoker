@@ -2,8 +2,9 @@ import { StatusCodes } from 'http-status-codes';
 import { FindManyOptions, FindOptionsWhere, In } from 'typeorm';
 
 import { ErrorMessages } from '../../constants/message';
-import { CreateGroup } from '../../types';
+import { CreateGroup, GroupDetails } from '../../types';
 import customGetRepository from '../../utils/db';
+import { Pokerboard } from '../pokerboard/model';
 import { User } from '../user/model';
 import { findUsers } from '../user/repository';
 import { Group } from './model';
@@ -38,6 +39,20 @@ export const createGroup = async (data: CreateGroup): Promise<Group> => {
       data: errorData,
     };
   }
+};
+
+export const getGroupsDetails = async (entity: Pokerboard | User): Promise<GroupDetails[]> => {
+  const groups = await entity.groups;
+  const groupsDetails: GroupDetails[] = [];
+  groups.forEach((group) => {
+    groupsDetails.push({
+      id: group.id,
+      name: group.name,
+      admin: group.admin,
+      countOfMembers: group.countOfMembers,
+    });
+  });
+  return groupsDetails;
 };
 
 export const findGroup = async (findOptions: FindOptionsWhere<Group>): Promise<Group> => {

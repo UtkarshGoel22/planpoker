@@ -37,6 +37,14 @@ export type GroupDetails = {
   member?: string;
 };
 
+export type UserDetails = {
+  role: string;
+  userId: string;
+  name: string;
+  email: string;
+  inviteStatus: string;
+};
+
 export type UserGroupDetails = {
   admin: string;
   countOfMembers: number;
