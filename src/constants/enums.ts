@@ -38,6 +38,11 @@ export enum Routes {
   POKERBOARD = '/pokerboard',
 }
 
+export enum SortTypes {
+  ASCENDING = 'ASC',
+  DESCENDING = 'DESC',
+}
+
 export enum TicketTypes {
   BUG = 'Bug',
   STORY = 'Story',

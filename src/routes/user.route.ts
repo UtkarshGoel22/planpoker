@@ -6,13 +6,15 @@ import {
   searchGroup,
 } from '../controllers/group.controller';
 import { getPokerboardsAssociatedToUser } from '../controllers/pokerboard.controller';
-import { getUser, updateUser } from '../controllers/user.controller';
+import { getTicketsAssociatedToUser, getUser, updateUser } from '../controllers/user.controller';
 import { loginUser, logoutUser } from '../controllers/user.controller.auth';
 import {
   registerUser,
   reverifyUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
+import { createGroupValidation } from '../middlewares/group.middleware';
+import { searchValidation } from '../middlewares/search.middleware';
 import {
   loginUserValidation,
   registerUserValidation,
@@ -21,8 +23,6 @@ import {
   updateUserValidation,
   verifyUserValidation,
 } from '../middlewares/user.middleware';
-import { createGroupValidation } from '../middlewares/group.middleware';
-import { searchValidation } from '../middlewares/search.middleware';
 
 const router: express.Router = express.Router();
 
@@ -47,5 +47,7 @@ router.get('/group', searchValidation, searchGroup);
 router.get('/groups', tokenValidation, getGroupsAssociatedToUser);
 
 router.get('/pokerboard', tokenValidation, getPokerboardsAssociatedToUser);
+
+router.get('/pokerboard', tokenValidation, getTicketsAssociatedToUser);
 
 export default router;
