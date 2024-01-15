@@ -37,6 +37,15 @@ export type GroupDetails = {
   member?: string;
 };
 
+export type PokerboardDetails = {
+  id: string;
+  manager: string;
+  name: string;
+  status: string;
+  createdBy: string;
+  deckType: DeckTypes.EVEN | DeckTypes.FIBONACCI | DeckTypes.ODD | DeckTypes.SERIAL;
+};
+
 export type TicketDetails = {
   id: string;
   summary: string;

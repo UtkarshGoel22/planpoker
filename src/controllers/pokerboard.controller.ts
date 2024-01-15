@@ -8,16 +8,17 @@ import { getGroupsDetails } from '../entity/group/repository';
 import { createPokerboard } from '../entity/pokerboard/repository';
 import { findTickets, getTicketsDetails, saveTickets } from '../entity/ticket/repository';
 import {
-  importTicketsById,
-  importTicketsByJQL,
-  importTicketsBySprint,
-} from '../helpers/pokerboard.helper';
-import {
+  findPokerboardsAssociatedToUser,
   findUserPokerboard,
   getUsersDetails,
   saveUserPokerboard,
 } from '../entity/userPokerboard/repository';
-import { TicketDetails } from '../types';
+import {
+  importTicketsById,
+  importTicketsByJQL,
+  importTicketsBySprint,
+} from '../helpers/pokerboard.helper';
+import { PokerboardDetails, TicketDetails } from '../types';
 import { makeResponse } from '../utils/common';
 import { setImportTicketResposneMessage } from '../utils/jira';
 
@@ -111,6 +112,13 @@ export const getPokerboard = async (req: Request, res: Response) => {
   res
     .status(StatusCodes.OK)
     .json(makeResponse(true, ResponseMessages.GET_POKERBOARD_SUCCESS, pokerboardData));
+};
+
+export const getPokerboardsAssociatedToUser = async (req: Request, res: Response) => {
+  const pokerboards: PokerboardDetails[] = await findPokerboardsAssociatedToUser(req.user);
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.GET_POKERBOARDS_SUCCESS, pokerboards));
 };
 
 export const importTicketsInPokerboard = async (req: Request, res: Response) => {

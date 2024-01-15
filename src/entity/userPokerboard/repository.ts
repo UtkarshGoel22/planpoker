@@ -26,6 +26,28 @@ export const createUserPokerboards = async (users: User[], pokerboards: Pokerboa
   await userPokerboardRepository.save(userPokerBoards);
 };
 
+export const findPokerboardsAssociatedToUser = async (user: User) => {
+  const userPokerboardRepository = customGetRepository(UserPokerboard);
+  const result = await userPokerboardRepository
+    .createQueryBuilder('user_pokerboard')
+    .where({
+      userId: user.id,
+      isActive: true,
+      inviteStatus: InviteStatus.ACCEPTED,
+    })
+    .leftJoin(Pokerboard, 'pokerboard', 'pokerboard.id = pokerboardId')
+    .leftJoin(User, 'user', 'user.id = pokerboard.manager')
+    .select('user.user_name', 'createdBy')
+    .addSelect('pokerboard.id', 'id')
+    .addSelect('pokerboard.manager', 'manager')
+    .addSelect('pokerboard.deck_type', 'deckType')
+    .addSelect('pokerboard.status', 'status')
+    .addSelect('pokerboard.name', 'name')
+    .orderBy('pokerboard.updated_at', 'DESC')
+    .getRawMany();
+  return result;
+};
+
 export const findUserPokerboard = async (
   findOptions: FindOneOptions<UserPokerboard>,
 ): Promise<UserPokerboard> => {

@@ -1,5 +1,11 @@
 import express from 'express';
 
+import {
+  createUserGroup,
+  getGroupsAssociatedToUser,
+  searchGroup,
+} from '../controllers/group.controller';
+import { getPokerboardsAssociatedToUser } from '../controllers/pokerboard.controller';
 import { getUser, updateUser } from '../controllers/user.controller';
 import { loginUser, logoutUser } from '../controllers/user.controller.auth';
 import {
@@ -7,11 +13,6 @@ import {
   reverifyUser,
   verifyUser,
 } from '../controllers/user.controller.registration';
-import {
-  createUserGroup,
-  getGroupsAssociatedToUser,
-  searchGroup,
-} from '../controllers/group.controller';
 import {
   loginUserValidation,
   registerUserValidation,
@@ -44,5 +45,7 @@ router.post('/group', tokenValidation, createGroupValidation, createUserGroup);
 router.get('/group', searchValidation, searchGroup);
 
 router.get('/groups', tokenValidation, getGroupsAssociatedToUser);
+
+router.get('/pokerboard', tokenValidation, getPokerboardsAssociatedToUser);
 
 export default router;
