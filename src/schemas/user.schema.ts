@@ -4,7 +4,7 @@ import { Regex } from '../constants/common';
 import { FieldConstraints, FieldNames } from '../constants/field';
 import { ErrorMessages, ValidationMessages } from '../constants/message';
 
-export const loginSchema = z.object({
+export const LoginSchema = z.object({
   email: z
     .string({ required_error: ValidationMessages.EMAIL_REQUIRED })
     .email(ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD),
@@ -14,7 +14,7 @@ export const loginSchema = z.object({
     .max(FieldConstraints.PASSWORD.MAX, ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD),
 });
 
-export const registrationSchema = z
+export const RegistrationSchema = z
   .object({
     firstName: z
       .string({ required_error: ValidationMessages.FIRST_NAME_REQUIRED })
@@ -45,13 +45,13 @@ export const registrationSchema = z
     path: [FieldNames.PASSWORD],
   });
 
-export const userReverificationSchema = z.object({
+export const UserReverificationSchema = z.object({
   email: z
     .string({ required_error: ValidationMessages.EMAIL_REQUIRED })
     .email(ValidationMessages.INVALID_EMAIL),
 });
 
-export const userUpdationSchema = z.object({
+export const UserUpdationSchema = z.object({
   firstName: z
     .string({ required_error: ValidationMessages.FIRST_NAME_REQUIRED })
     .max(FieldConstraints.FIRST_NAME.MAX, ValidationMessages.FIRST_NAME_MAX_LENGTH)
@@ -68,6 +68,6 @@ export const userUpdationSchema = z.object({
     .optional(),
 });
 
-export const userVerificationSchema = z.object({
+export const UserVerificationSchema = z.object({
   token: z.string({ required_error: ValidationMessages.TOKEN_REQUIRED }),
 });

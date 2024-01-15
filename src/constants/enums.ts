@@ -14,7 +14,7 @@ export enum EmailSubject {
   VERIFICATION_SUCCESS = 'Account verified successfully!!',
 }
 
-export const enum ImportByType {
+export const enum ImportByTypes {
   ID = 'ID',
   SPRINT = 'SPRINT',
   JQL = 'JQL',
