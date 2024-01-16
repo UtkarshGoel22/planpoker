@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Regex } from '../constants/common';
 import { FieldConstraints, FieldNames } from '../constants/field';
 import { ValidationMessages } from '../constants/message';
-import { DeckTypes } from '../constants/enums';
+import { DeckTypes, TicketTypes } from '../constants/enums';
 
 const UserSchema = z.object({
   id: z
@@ -55,4 +55,45 @@ export const PokerboardIdSchema = z.object({
   id: z
     .string({ required_error: ValidationMessages.ID_REQUIRED })
     .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.ID_REQUIRED),
+});
+
+const UpdateTicketSchema = z.object({
+  id: z
+    .string({ required_error: ValidationMessages.TICKET_ID_REQUIRED })
+    .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.TICKET_ID_REQUIRED),
+  summary: z
+    .string()
+    .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.TICKET_SUMMARY_REQUIRED)
+    .optional(),
+  description: z
+    .string()
+    .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.TICKET_DESCRIPTION_REQUIRED)
+    .optional(),
+  estimate: z
+    .number()
+    .positive(ValidationMessages.TICKET_ESTIMATE_SHOULD_BE_A_POSITIVE_NUMBER)
+    .optional(),
+  type: z
+    .enum([TicketTypes.BUG, TicketTypes.STORY, TicketTypes.TASK], {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      errorMap: (issue, _ctx) => {
+        switch (issue.code) {
+          case 'invalid_type':
+            return { message: ValidationMessages.INVALID_TICKET_TYPE };
+          case 'invalid_enum_value':
+            return { message: ValidationMessages.INVALID_TICKET_TYPE };
+          default:
+            return { message: ValidationMessages.TICKET_TYPE_REQUIRED };
+        }
+      },
+    })
+    .optional(),
+  order: z
+    .number()
+    .positive(ValidationMessages.TICKET_ORDER_SHOULD_BE_A_POSITIVE_NUMBER)
+    .optional(),
+});
+
+export const UpdateTicketsSchema = z.object({
+  tickets: z.array(UpdateTicketSchema, { required_error: ValidationMessages.TICKETS_REQUIRED }),
 });

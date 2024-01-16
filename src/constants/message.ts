@@ -85,6 +85,7 @@ export const ResponseMessages = {
   SOME_TICKETS_ADDED_SUCCESSFULLY:
     'Some ticket already exist. Rest of the tickets were saved successfully',
   TICKETS_ADDED_SUCCESSFULLY: 'Tickets added successfully',
+  TICKETS_UPDATED_SUCCESSFULLY: 'Tickets updated successfully',
   UPDATE_USER_SUCCESS: 'User updated successfully',
   USER_SEARCH_SUCCESS: 'Fetched users successfully',
   VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
@@ -122,6 +123,7 @@ export const ValidationMessages = {
   TICKET_DESCRIPTION_REQUIRED: 'Ticket description is a required field',
   TICKET_ESTIMATE_SHOULD_BE_A_POSITIVE_NUMBER: 'Ticket estimate should be a positive number',
   TICKET_ID_REQUIRED: 'Ticket id is a required field',
+  TICKET_ORDER_SHOULD_BE_A_POSITIVE_NUMBER: 'Ticket order should be a positive number',
   TICKET_SUMMARY_REQUIRED: 'Ticket summary is a required field',
   TICKET_TYPE_REQUIRED: 'Ticket type is a required field',
   TICKETS_REQUIRED: 'Tickets is a required field',

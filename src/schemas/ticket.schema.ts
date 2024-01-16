@@ -34,7 +34,5 @@ const TicketSchema = z.object({
 });
 
 export const TicketsSchema = z.object({
-  tickets: z.array(TicketSchema, {
-    required_error: ValidationMessages.TICKETS_REQUIRED,
-  }),
+  tickets: z.array(TicketSchema, { required_error: ValidationMessages.TICKETS_REQUIRED }),
 });

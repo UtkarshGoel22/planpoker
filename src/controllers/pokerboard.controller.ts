@@ -17,10 +17,12 @@ import {
   importTicketsById,
   importTicketsByJQL,
   importTicketsBySprint,
+  updateTicketsInPokerboard,
 } from '../helpers/pokerboard.helper';
 import { PokerboardDetails, TicketDetails } from '../types';
 import { makeResponse } from '../utils/common';
 import { setImportTicketResposneMessage } from '../utils/jira';
+import { Ticket } from '../entity/ticket/model';
 
 export const addTicketsToPokerboard = async (req: Request, res: Response) => {
   const pokerboard = req.pokerboard;
@@ -152,4 +154,11 @@ export const importTicketsInPokerboard = async (req: Request, res: Response) => 
         .json(makeResponse(false, ErrorMessages.SOMETHING_WENT_WRONG));
     }
   }
+};
+
+export const updatePokerboardTickets = async (req: Request, res: Response) => {
+  const tickets: Ticket[] = await updateTicketsInPokerboard(req.body.tickets);
+  return res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.TICKETS_UPDATED_SUCCESSFULLY, tickets));
 };

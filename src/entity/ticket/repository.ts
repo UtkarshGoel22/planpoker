@@ -34,3 +34,8 @@ export const saveTickets = async (tickets: TicketDetails[], pokerboard: Pokerboa
     count += 1;
   });
 };
+
+export const updateTickets = async (tickets: Ticket[]): Promise<Ticket[]> => {
+  const ticketRepository = customGetRepository(Ticket);
+  return ticketRepository.save(tickets);
+};

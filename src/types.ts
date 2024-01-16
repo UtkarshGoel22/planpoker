@@ -54,6 +54,15 @@ export type TicketDetails = {
   type: TicketTypes;
 };
 
+export type TicketUpdateDetails = {
+  id: string;
+  summary?: string;
+  description?: string;
+  estimate?: number;
+  type?: TicketTypes;
+  order?: number;
+};
+
 export type UserDetails = {
   role: string;
   userId: string;
