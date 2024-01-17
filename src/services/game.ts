@@ -24,6 +24,11 @@ export const game = () => {
     );
 
     socket.on(ServerEvents.DISCONNECTING, async () => beforeDisconnect(socket));
+
+    socket.on(ClientEvents.LEAVE_GAME, () => {
+      const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+      socket.leave(pokerboardId);
+    });
   });
 };
 
