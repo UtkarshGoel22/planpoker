@@ -32,6 +32,8 @@ export const game = () => {
     });
 
     socket.on(ServerEvents.START_TIMER, async () => startTimer(socket));
+
+    socket.on(ServerEvents.NEXT_TICKET, async () => nextTicket(socket));
   });
 };
 
@@ -130,6 +132,39 @@ const startTimer = async (socket: any) => {
         clearInterval(countdown);
       }
     }, TimeConstants.ONE_SECOND);
+  } else {
+    accessDenied(socket);
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const nextTicket = async (socket: any) => {
+  const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+
+  if (socket[SocketConstants.ROLE] === UserRoles.MANAGER) {
+    const currentGame = gameInfo[pokerboardId];
+    let currentTicketIndex = currentGame.currentTicketIndex;
+    const tickets = currentGame.tickets;
+
+    if (currentTicketIndex == tickets.length - 1) {
+      io.to(pokerboardId).emit(ClientEvents.GAME_ERROR, {
+        ticket: GameErrors.LAST_TICKET,
+      });
+    } else {
+      gameInfo[pokerboardId].currentTicketIndex++;
+      gameInfo[pokerboardId].timerDuration = TimeConstants.TIMER_DURATION;
+      gameInfo[pokerboardId].timerStatus = TimerStatus.NOT_STARTED;
+
+      const currentTicketId = tickets[++currentTicketIndex].id;
+      const comments = await importComments(currentTicketId);
+
+      io.to(pokerboardId).emit(ClientEvents.CURRENT_TICKET, {
+        currentTicket: gameInfo[pokerboardId].tickets[currentTicketIndex],
+        comments,
+        timerDuration: gameInfo[pokerboardId].timerDuration,
+        timerStatus: gameInfo[pokerboardId].timerStatus,
+      });
+    }
   } else {
     accessDenied(socket);
   }
