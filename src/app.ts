@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express, { NextFunction, Response, Request } from 'express';
+import { Server } from 'http';
 import { StatusCodes } from 'http-status-codes';
 
 import { Routes } from './constants/enums';
@@ -12,9 +13,11 @@ import { makeResponse } from './utils/common';
 
 class App {
   public app: express.Application;
+  public server: Server;
 
   constructor() {
     this.app = express();
+    this.server = new Server(this.app);
     this.config();
   }
 
@@ -36,4 +39,4 @@ class App {
   }
 }
 
-export default new App().app;
+export default new App().server;

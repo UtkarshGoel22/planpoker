@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { DataSource } from 'typeorm';
 
-import app from '../src/app';
+import server from '../src/app';
 import { testControllers } from './controllers/test.controllers';
 import { testRepositories } from './entity/test.repositories';
 import { testHelpers } from './helpers/test.helpers';
@@ -29,7 +29,7 @@ describe('Main', () => {
     connection = await createTestingConnections();
 
     // Initialize test server.
-    testServer = app.listen(TestConfig.PORT, () =>
+    testServer = server.listen(TestConfig.PORT, () =>
       console.log('Test server started listening on port', TestConfig.PORT),
     );
 
