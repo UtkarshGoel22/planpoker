@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { In } from 'typeorm';
 
 import { Api } from '../constants/api';
-import { EmailSubject } from '../constants/enums';
+import { EmailSubject, PokerboardStatus } from '../constants/enums';
 import { EmailMessages, ErrorMessages } from '../constants/message';
 import { Pokerboard } from '../entity/pokerboard/model';
 import { createPokerboardInvites } from '../entity/pokerboardInvite/repository';
@@ -19,6 +19,7 @@ import { validateData } from '../utils/common';
 import { getTicketsFromJIRA } from '../utils/jira';
 import { sendBulkMails } from '../utils/notification';
 import { TicketUpdateDetails } from '../types';
+import { findAndUpdatePokerboard } from '../entity/pokerboard/repository';
 
 export const importTicketsById = async (ticketsInput: string) => {
   const url: string = `${Api.JIRA.V3_ISSUE}${ticketsInput}`;
@@ -145,6 +146,26 @@ export const updateTicketsInPokerboard = async (tickets: TicketUpdateDetails[]) 
 
   const ticketsToUpdate = Object.values(ticketsSet);
   return updateTickets(ticketsToUpdate);
+};
+
+export const updateUnestimatedTicketsAndPokerboardStatus = async (
+  tickets: Ticket[],
+  currentTicketIndex: number,
+  pokerboardId: string,
+  status: PokerboardStatus.CREATED | PokerboardStatus.ENDED | PokerboardStatus.STARTED,
+) => {
+  const len = tickets.length;
+  let unEstimatedTickets: Ticket[] = [];
+  if (!tickets[currentTicketIndex].estimate) {
+    unEstimatedTickets = tickets.slice(currentTicketIndex);
+  } else {
+    if (currentTicketIndex != len - 1 && !tickets[currentTicketIndex + 1].estimate) {
+      unEstimatedTickets = tickets.slice(currentTicketIndex + 1);
+    }
+  }
+  unEstimatedTickets.forEach((ticket) => (ticket.isActive = false));
+  await updateTickets(unEstimatedTickets);
+  await findAndUpdatePokerboard({ id: pokerboardId }, { status: status });
 };
 
 export const validateAcceptPokerboardInviteData = (data: object) => {

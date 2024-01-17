@@ -28,3 +28,8 @@ export const findToken = async (findOptions: FindOptionsWhere<Token>): Promise<T
   const tokenRepository = customGetRepository(Token);
   return tokenRepository.findOne({ where: findOptions });
 };
+
+export const saveToken = async (token: Token) => {
+  const tokenRepository = customGetRepository(Token);
+  return tokenRepository.save(token);
+};

@@ -18,6 +18,7 @@ const config = {
   JIRA_AUTH: process.env.JIRA_AUTH,
   JWT: { EXPIRY: process.env.JWT_EXPIRY, SECRECT: process.env.JWT_SECRET },
   NODE_ENV: process.env.NODE_ENV || Environments.DEV,
+  ORIGIN: process.env.ORIGIN,
   SEARCH: { LIMIT: 10 },
 };
 
