@@ -10,10 +10,12 @@ import {
 } from '../constants/game';
 import { findAndUpdatePokerboard } from '../entity/pokerboard/repository';
 import { findAndUpdateTicket, getTicketsDetails } from '../entity/ticket/repository';
+import { findUser } from '../entity/user/repository';
 import { updateUnestimatedTicketsAndPokerboardStatus } from '../helpers/pokerboard.helper';
+import { saveTicketEstimate } from '../helpers/ticket.helper';
 import { userVerification } from '../middlewares/socket.io.midleware';
 import { io } from '../server';
-import { addCommentOnJira, importComments } from '../utils/jira';
+import { addCommentOnJira, addEstimateOnJira, importComments } from '../utils/jira';
 
 const gameInfo: GameInfo = {};
 
@@ -42,6 +44,10 @@ export const game = () => {
     socket.on(ServerEvents.SKIP_TICKET, async () => skipTicket(socket));
 
     socket.on(ServerEvents.ADD_COMMENT, async (comment: string) => addComment(socket, comment));
+
+    socket.on(ServerEvents.SET_ESTIMATE, async (estimateValue: number, timerValue?: number) =>
+      setEstimate(socket, estimateValue, timerValue),
+    );
   });
 };
 
@@ -102,7 +108,7 @@ const joinGame = async (socket: any, pokerboardId: string, callback: Function) =
         role: role,
         comments: comments,
         userEmail: user.email,
-        userName: user.username,
+        username: user.username,
         currentTicket: tickets[index],
         timerStatus: gameInfo[pokerboardId].timerStatus,
         timerDuration: gameInfo[pokerboardId].timerDuration,
@@ -251,6 +257,60 @@ const addComment = async (socket: any, comment: string) => {
     }
   } else {
     accessDenied(socket);
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const setEstimate = async (socket: any, estimateValue: number, timerValue?: number) => {
+  const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+  const currentTicketIndex = gameInfo[pokerboardId].currentTicketIndex;
+  const currentTicketId = gameInfo[pokerboardId].tickets[currentTicketIndex].id;
+
+  if (!gameInfo[pokerboardId].gameTicketInfo[currentTicketId]) {
+    gameInfo[pokerboardId].gameTicketInfo[currentTicketId] = {
+      estimate: undefined,
+      playerEstimates: {},
+    };
+  }
+
+  if (socket[SocketConstants.ROLE] === UserRoles.MANAGER) {
+    gameInfo[pokerboardId].gameTicketInfo[currentTicketId].estimate = estimateValue;
+    gameInfo[pokerboardId].tickets[currentTicketIndex].estimate = estimateValue;
+    const playerEstimates = gameInfo[pokerboardId].gameTicketInfo[currentTicketId].playerEstimates;
+
+    saveTicketEstimate({
+      ticketId: currentTicketId,
+      managerId: socket[SocketConstants.USER_ID],
+      estimate: estimateValue,
+      playerEstimates,
+    });
+
+    const addEstimateResult = await addEstimateOnJira(currentTicketId, estimateValue);
+
+    if (addEstimateResult) {
+      io.to(pokerboardId).emit(ClientEvents.MANAGER_ESTIMATE, estimateValue);
+    } else {
+      io.to(socket.id).emit(ClientEvents.GAME_ERROR, {
+        estimate: GameErrors.JIRA_ESTIMATE,
+      });
+    }
+  } else if (socket[SocketConstants.ROLE] === UserRoles.PLAYER) {
+    const user = await findUser({ id: socket[SocketConstants.USER_ID] });
+    const username = user.username;
+
+    gameInfo[pokerboardId].gameTicketInfo[currentTicketId].playerEstimates[
+      socket[SocketConstants.USER_ID]
+    ] = {
+      estimate: estimateValue,
+      username: username,
+      timeTaken: TimeConstants.TIMER_DURATION - timerValue,
+    };
+
+    io.to(pokerboardId).emit(ClientEvents.PLAYER_ESTIMATE, {
+      estimate: estimateValue,
+      username: username,
+      id: user.id,
+    });
   }
 };
 

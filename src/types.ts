@@ -45,6 +45,12 @@ export type JiraTicketCommentBody = {
   };
 };
 
+export type JiraTicketEstimateBody = {
+  fields: {
+    customfield_10016: number;
+  };
+};
+
 export type PokerboardDetails = {
   id: string;
   manager: string;

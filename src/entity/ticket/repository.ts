@@ -1,4 +1,4 @@
-import { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { FindManyOptions, FindOneOptions, FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { TicketDetails } from '../../types';
@@ -12,6 +12,11 @@ export const findAndUpdateTicket = async (
 ) => {
   const ticketRepository = customGetRepository(Ticket);
   await ticketRepository.update(findOptions, dataToUpdate);
+};
+
+export const findTicket = async (findOptions: FindOneOptions<Ticket>): Promise<Ticket> => {
+  const ticketRepository = customGetRepository(Ticket);
+  return ticketRepository.findOne(findOptions);
 };
 
 export const findTickets = async (findOptions: FindManyOptions<Ticket>): Promise<Ticket[]> => {

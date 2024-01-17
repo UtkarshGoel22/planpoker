@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Api } from '../constants/api';
 import { ErrorMessages } from '../constants/message';
 import config from '../settings/config';
-import { JiraTicketCommentBody } from '../types';
+import { JiraTicketCommentBody, JiraTicketEstimateBody } from '../types';
 
 export const addCommentOnJira = async (issueId: string, comment: string) => {
   const commentBody: JiraTicketCommentBody = {
@@ -21,6 +21,32 @@ export const addCommentOnJira = async (issueId: string, comment: string) => {
           'base64',
         )}`,
         Accept: 'application/json',
+      },
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .then((_result) => {
+      return true;
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .catch((_err) => {
+      return false;
+    });
+  return result;
+};
+
+export const addEstimateOnJira = async (issueId: string, estimate: number) => {
+  const estimateBody: JiraTicketEstimateBody = {
+    fields: { customfield_10016: estimate },
+  };
+
+  const result = await axios
+    .put(`${Api.JIRA.BASE_URL}${Api.JIRA.V3_ISSUE}${issueId}`, estimateBody, {
+      headers: {
+        Authorization: `${Api.JIRA.HEADERS.BASIC} ${Buffer.from(process.env.JIRA_AUTH).toString(
+          'base64',
+        )}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

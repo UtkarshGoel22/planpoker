@@ -72,9 +72,16 @@ export type GameInfo = {
 export type PlayerEstimates = {
   [key: string]: {
     estimate: number;
-    userName: string;
+    username: string;
     timeTaken?: number;
   };
+};
+
+export type TicketEstimateData = {
+  ticketId: string;
+  managerId: string;
+  estimate: number;
+  playerEstimates: PlayerEstimates;
 };
 
 export type TicketInfo = {
