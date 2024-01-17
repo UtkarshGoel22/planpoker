@@ -48,6 +48,7 @@ export const SocketConstants = {
 
 export const TimeConstants = {
   DISCONNECT_MANAGER_TIME: 30000,
+  ONE_SECOND: 1000,
   TIMER_DURATION: 10,
 };
 

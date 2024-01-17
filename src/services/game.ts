@@ -1,4 +1,4 @@
-import { UserRoles } from '../constants/enums';
+import { PokerboardStatus, UserRoles } from '../constants/enums';
 import {
   ClientEvents,
   GameErrors,
@@ -7,6 +7,7 @@ import {
   TimeConstants,
   TimerStatus,
 } from '../constants/game';
+import { findAndUpdatePokerboard } from '../entity/pokerboard/repository';
 import { getTicketsDetails } from '../entity/ticket/repository';
 import { userVerification } from '../middlewares/socket.io.midleware';
 import { io } from '../server';
@@ -29,6 +30,8 @@ export const game = () => {
       const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
       socket.leave(pokerboardId);
     });
+
+    socket.on(ServerEvents.START_TIMER, async () => startTimer(socket));
   });
 };
 
@@ -59,9 +62,7 @@ const joinGame = async (socket: any, pokerboardId: string, callback: Function) =
     const tickets = await getTicketsDetails(pokerboard);
 
     if (tickets.length === 0) {
-      io.to(socket.id).emit(ClientEvents.GAME_ERROR, {
-        ticket: GameErrors.NO_TICKETS,
-      });
+      io.to(socket.id).emit(ClientEvents.GAME_ERROR, { ticket: GameErrors.NO_TICKETS });
     } else {
       if (!gameInfo[pokerboardId]) {
         gameInfo[pokerboardId] = {
@@ -105,8 +106,36 @@ const joinGame = async (socket: any, pokerboardId: string, callback: Function) =
       }
     }
   } else {
-    io.to(socket.id).emit(ClientEvents.GAME_ERROR, {
-      user: GameErrors.INVALID_USER,
-    });
+    io.to(socket.id).emit(ClientEvents.GAME_ERROR, { user: GameErrors.INVALID_USER });
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const startTimer = async (socket: any) => {
+  const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+
+  if (socket[SocketConstants.ROLE] === UserRoles.MANAGER) {
+    gameInfo[pokerboardId].timerStatus = TimerStatus.STARTED;
+
+    findAndUpdatePokerboard({ id: pokerboardId }, { status: PokerboardStatus.STARTED });
+
+    io.to(pokerboardId).emit(ClientEvents.TIMER_STARTED);
+
+    const countdown = setInterval(() => {
+      gameInfo[pokerboardId].timerDuration--;
+      io.to(pokerboardId).emit(ClientEvents.TIMER, gameInfo[pokerboardId].timerDuration);
+      if (gameInfo[pokerboardId].timerDuration === 0) {
+        gameInfo[pokerboardId].timerStatus = TimerStatus.ENDED;
+        io.to(pokerboardId).emit(ClientEvents.TIMER_ENDED);
+        clearInterval(countdown);
+      }
+    }, TimeConstants.ONE_SECOND);
+  } else {
+    accessDenied(socket);
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const accessDenied = async (socket: any) => {
+  io.to(socket.id).emit(ClientEvents.GAME_ERROR, { accessDenied: GameErrors.ACCESS_DENIED });
 };

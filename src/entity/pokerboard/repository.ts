@@ -1,4 +1,5 @@
-import { FindManyOptions, FindOneOptions, In } from 'typeorm';
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { UNREGISTERED } from '../../constants/common';
 import { PokerboardStatus } from '../../constants/enums';
@@ -72,4 +73,12 @@ export const findPokerboards = async (
 ): Promise<Pokerboard[]> => {
   const pokerboardRepository = customGetRepository(Pokerboard);
   return pokerboardRepository.find(findOptions);
+};
+
+export const findAndUpdatePokerboard = async (
+  findOptions: FindOptionsWhere<Pokerboard>,
+  dataToUpdate: QueryDeepPartialEntity<Pokerboard>,
+) => {
+  const pokerboardRepository = customGetRepository(Pokerboard);
+  await pokerboardRepository.update(findOptions, dataToUpdate);
 };
