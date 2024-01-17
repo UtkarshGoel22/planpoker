@@ -2,6 +2,7 @@ import { PokerboardStatus, UserRoles } from '../constants/enums';
 import {
   ClientEvents,
   GameErrors,
+  GameInfo,
   ServerEvents,
   SocketConstants,
   TimeConstants,
@@ -12,9 +13,9 @@ import { findAndUpdateTicket, getTicketsDetails } from '../entity/ticket/reposit
 import { updateUnestimatedTicketsAndPokerboardStatus } from '../helpers/pokerboard.helper';
 import { userVerification } from '../middlewares/socket.io.midleware';
 import { io } from '../server';
-import { importComments } from '../utils/jira';
+import { addCommentOnJira, importComments } from '../utils/jira';
 
-let gameInfo: GameInfo = {};
+const gameInfo: GameInfo = {};
 
 export const game = () => {
   io.on(ServerEvents.CONNECTION, (socket) => {
@@ -39,6 +40,8 @@ export const game = () => {
     socket.on(ServerEvents.END_GAME, async () => endGame(socket));
 
     socket.on(ServerEvents.SKIP_TICKET, async () => skipTicket(socket));
+
+    socket.on(ServerEvents.ADD_COMMENT, async (comment: string) => addComment(socket, comment));
   });
 };
 
@@ -228,6 +231,26 @@ const skipTicket = async (socket: any) => {
       TimerStatus: gameInfo[pokerboardId].timerStatus,
       tickets,
     });
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const addComment = async (socket: any, comment: string) => {
+  const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+
+  if (socket[SocketConstants.ROLE] === UserRoles.MANAGER) {
+    const currentTicketIndex = gameInfo[pokerboardId].currentTicketIndex;
+    const currentTicketId = gameInfo[pokerboardId].tickets[currentTicketIndex].id;
+
+    const result = await addCommentOnJira(currentTicketId, comment);
+
+    if (result) {
+      io.to(pokerboardId).emit(ClientEvents.COMMENT_ADDED, comment);
+    } else {
+      io.to(socket.id).emit(ClientEvents.GAME_ERROR, { comment: GameErrors.JIRA_COMMENT });
+    }
+  } else {
+    accessDenied(socket);
   }
 };
 

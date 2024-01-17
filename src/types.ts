@@ -37,6 +37,14 @@ export type GroupDetails = {
   member?: string;
 };
 
+export type JiraTicketCommentBody = {
+  body: {
+    version: number;
+    type: string;
+    content: [{ type: string; content: [{ type: string; text: string }] }];
+  };
+};
+
 export type PokerboardDetails = {
   id: string;
   manager: string;
