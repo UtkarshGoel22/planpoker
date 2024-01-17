@@ -9,6 +9,7 @@ import {
 } from '../constants/game';
 import { findAndUpdatePokerboard } from '../entity/pokerboard/repository';
 import { getTicketsDetails } from '../entity/ticket/repository';
+import { updateUnestimatedTicketsAndPokerboardStatus } from '../helpers/pokerboard.helper';
 import { userVerification } from '../middlewares/socket.io.midleware';
 import { io } from '../server';
 import { importComments } from '../utils/jira';
@@ -34,6 +35,8 @@ export const game = () => {
     socket.on(ServerEvents.START_TIMER, async () => startTimer(socket));
 
     socket.on(ServerEvents.NEXT_TICKET, async () => nextTicket(socket));
+
+    socket.on(ServerEvents.END_GAME, async () => endGame(socket));
   });
 };
 
@@ -165,6 +168,23 @@ const nextTicket = async (socket: any) => {
         timerStatus: gameInfo[pokerboardId].timerStatus,
       });
     }
+  } else {
+    accessDenied(socket);
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const endGame = async (socket: any) => {
+  const role = socket[SocketConstants.ROLE];
+  if (role == UserRoles.MANAGER) {
+    const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+    updateUnestimatedTicketsAndPokerboardStatus(
+      gameInfo[pokerboardId].tickets,
+      gameInfo[pokerboardId].currentTicketIndex,
+      pokerboardId,
+      PokerboardStatus.ENDED,
+    );
+    io.to(pokerboardId).emit(ClientEvents.END_GAME);
   } else {
     accessDenied(socket);
   }
