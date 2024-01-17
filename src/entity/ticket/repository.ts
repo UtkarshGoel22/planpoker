@@ -1,9 +1,18 @@
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { TicketDetails } from '../../types';
 import customGetRepository from '../../utils/db';
 import { Pokerboard } from '../pokerboard/model';
 import { Ticket } from './model';
+
+export const findAndUpdateTicket = async (
+  findOptions: FindOptionsWhere<Ticket>,
+  dataToUpdate: QueryDeepPartialEntity<Ticket>,
+) => {
+  const ticketRepository = customGetRepository(Ticket);
+  await ticketRepository.update(findOptions, dataToUpdate);
+};
 
 export const findTickets = async (findOptions: FindManyOptions<Ticket>): Promise<Ticket[]> => {
   const ticketRepository = customGetRepository(Ticket);

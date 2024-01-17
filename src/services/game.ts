@@ -8,7 +8,7 @@ import {
   TimerStatus,
 } from '../constants/game';
 import { findAndUpdatePokerboard } from '../entity/pokerboard/repository';
-import { getTicketsDetails } from '../entity/ticket/repository';
+import { findAndUpdateTicket, getTicketsDetails } from '../entity/ticket/repository';
 import { updateUnestimatedTicketsAndPokerboardStatus } from '../helpers/pokerboard.helper';
 import { userVerification } from '../middlewares/socket.io.midleware';
 import { io } from '../server';
@@ -37,6 +37,8 @@ export const game = () => {
     socket.on(ServerEvents.NEXT_TICKET, async () => nextTicket(socket));
 
     socket.on(ServerEvents.END_GAME, async () => endGame(socket));
+
+    socket.on(ServerEvents.SKIP_TICKET, async () => skipTicket(socket));
   });
 };
 
@@ -187,6 +189,45 @@ const endGame = async (socket: any) => {
     io.to(pokerboardId).emit(ClientEvents.END_GAME);
   } else {
     accessDenied(socket);
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const skipTicket = async (socket: any) => {
+  const pokerboardId = socket[SocketConstants.POKERBOARD_ID];
+  const currentGame = gameInfo[pokerboardId];
+  const tickets = currentGame.tickets;
+  const currentTicketIndex = currentGame.currentTicketIndex;
+  if (currentTicketIndex === tickets.length - 1) {
+    io.to(socket.id).emit(ClientEvents.GAME_ERROR, {
+      ticket: GameErrors.LAST_TICKET_SKIP,
+    });
+  } else {
+    const len = tickets.length;
+    const currentTicket = currentGame.tickets[currentTicketIndex];
+    tickets[currentTicketIndex].order = tickets[len - 1].order + 1;
+
+    findAndUpdateTicket(
+      { id: tickets[currentTicketIndex].id },
+      { order: tickets[currentTicketIndex].order },
+    );
+
+    tickets.splice(currentTicketIndex, 1);
+    tickets.push(currentTicket);
+
+    gameInfo[pokerboardId].timerDuration = TimeConstants.TIMER_DURATION;
+    gameInfo[pokerboardId].timerStatus = TimerStatus.NOT_STARTED;
+    gameInfo[pokerboardId].tickets = tickets;
+
+    const comments = await importComments(tickets[currentTicketIndex].id);
+
+    io.to(pokerboardId).emit(ClientEvents.SKIP_TICKET, {
+      currentTicket: tickets[currentTicketIndex],
+      comments,
+      timerDuration: gameInfo[pokerboardId].timerDuration,
+      TimerStatus: gameInfo[pokerboardId].timerStatus,
+      tickets,
+    });
   }
 };
 
