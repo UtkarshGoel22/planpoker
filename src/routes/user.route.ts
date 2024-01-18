@@ -48,6 +48,6 @@ router.get('/groups', tokenValidation, getGroupsAssociatedToUser);
 
 router.get('/pokerboards', tokenValidation, getPokerboardsAssociatedToUser);
 
-router.get('/pokerboard', tokenValidation, getTicketsAssociatedToUser);
+router.get('/tickets', tokenValidation, getTicketsAssociatedToUser);
 
 export default router;

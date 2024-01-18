@@ -73,6 +73,7 @@ export const ResponseMessages = {
   ACCEPT_POKERBOARD_INVITE_SUCCESS: 'You are added to the pokerboard successfully',
   GET_GROUPS_ASSOCIATED_TO_USER_SUCCESS: 'Fetched groups associated to the user successfully',
   GET_POKERBOARD_SUCCESS: 'Fetched pokerboard successfully',
+  GET_TICKETS_SUCCESS: 'Fetched tickets successfully',
   GET_POKERBOARDS_SUCCESS: 'Fetched pokerboard(s) successfully',
   GET_USER_SUCCESS: 'Fetched user details successfully',
   GROUP_CREATION_SUCCESS: 'Group created successfully',
