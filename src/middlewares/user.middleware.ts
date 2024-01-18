@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { ErrorMessages, ValidationMessages } from '../constants/message';
+import { findToken, saveToken } from '../entity/token/repository';
 import { findUser } from '../entity/user/repository';
 import {
   validateUserLoginData,
@@ -11,7 +12,6 @@ import {
   validateUserVerificationData,
 } from '../helpers/user.helper';
 import { makeResponse } from '../utils/common';
-import { findToken } from '../entity/token/repository';
 
 export const loginUserValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -93,6 +93,11 @@ export const tokenValidation = async (req: Request, res: Response, next: NextFun
   const currentDate = new Date();
 
   if (!token || token.expiryDate <= currentDate) {
+    if (token && token.expiryDate <= currentDate && token.isActive) {
+      token.expiredAt = currentDate;
+      token.isActive = false;
+      await saveToken(token);
+    }
     const errorData = { auth: ErrorMessages.UNAUTHORIZED_ACCESS };
     return res
       .status(StatusCodes.UNAUTHORIZED)
