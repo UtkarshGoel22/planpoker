@@ -44,8 +44,11 @@ export const ErrorMessages = {
   INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
   INCORRECT_INPUT: 'Incorrect input',
   INVALID_REQUEST_DATA: 'Invalid request data',
+  INVITE_ALREADY_ACCEPTED: 'You have already accepted the invite',
+  INVITE_ALREADY_REJECTED: 'You have already rejected the invite',
   NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL: 'No account associated with the given email',
   NO_TICKETS_FOUND: 'No tickets found',
+  NOT_INVITED_TO_POKERBOARD: 'You are not invited for this pokerboard game',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
   UNAUTHORIZED_ACCESS: 'You do not have access to perform the action',
   USER_VERIFICATION_FAILED: 'User verfication failed',
@@ -64,6 +67,7 @@ export const LogMessages = {
 
 export const ResponseMessages = {
   ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
+  ACCEPT_POKERBOARD_INVITE_SUCCESS: 'You are added to the pokerboard successfully',
   GET_GROUPS_ASSOCIATED_TO_USER_SUCCESS: 'Fetched groups associated to the user successfully',
   GET_USER_SUCCESS: 'Fetched user details successfully',
   GROUP_CREATION_SUCCESS: 'Group created successfully',
@@ -100,6 +104,7 @@ export const ValidationMessages = {
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
   PASSWORD_REQUIRED: 'Password is a required field',
+  POKERBOARD_ID_REQUIRED: 'Pokerboard id is a required field',
   POKERBOARD_MIN_MEMBERS: 'Add at least one user or group to create the pokerboard',
   POKERBOARD_NAME_MAX_LENGTH: 'Pokerboard name length can be upto 30',
   POKERBOARD_NAME_MIN_LENGTH: 'Pokerboard name length must be atleast 6',

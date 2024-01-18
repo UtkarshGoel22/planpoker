@@ -1,3 +1,5 @@
+import { FindOneOptions } from 'typeorm';
+
 import { InviteStatus, UserRoles } from '../../constants/enums';
 import customGetRepository from '../../utils/db';
 import { Pokerboard } from '../pokerboard/model';
@@ -21,4 +23,18 @@ export const createUserPokerboards = async (users: User[], pokerboards: Pokerboa
   });
 
   await userPokerboardRepository.save(userPokerBoards);
+};
+
+export const findUserPokerboard = async (
+  findOptions: FindOneOptions<UserPokerboard>,
+): Promise<UserPokerboard> => {
+  const userPokerboardRepository = customGetRepository(UserPokerboard);
+  return userPokerboardRepository.findOne(findOptions);
+};
+
+export const saveUserPokerboard = async (
+  userPokerboard: UserPokerboard,
+): Promise<UserPokerboard> => {
+  const userPokerboardRepository = customGetRepository(UserPokerboard);
+  return userPokerboardRepository.save(userPokerboard);
 };

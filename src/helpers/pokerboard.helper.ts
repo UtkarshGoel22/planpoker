@@ -6,7 +6,7 @@ import { EmailMessages, ErrorMessages } from '../constants/message';
 import { Pokerboard } from '../entity/pokerboard/model';
 import { createPokerboardInvites } from '../entity/pokerboardInvite/repository';
 import { User } from '../entity/user/model';
-import { createPokerboardSchema } from '../schemas/pokerboard.schema';
+import { acceptPokerboardInviteSchema, createPokerboardSchema } from '../schemas/pokerboard.schema';
 import { validateData } from '../utils/common';
 import { getTicketsFromJIRA } from '../utils/jira';
 import { sendBulkMails } from '../utils/notification';
@@ -105,6 +105,14 @@ export const sendInvitationMailToVerifiedUsers = async (users: User[], pokerboar
     EmailMessages.POKERBOARD_INVITATION(pokerboard.name, pokerboard.id),
     receiverEmails,
   );
+};
+
+export const validateAcceptPokerboardInviteData = (data: object) => {
+  try {
+    return validateData(acceptPokerboardInviteSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
+  }
 };
 
 export const validateCreatePokerboardData = (data: object) => {
