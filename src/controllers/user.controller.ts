@@ -18,9 +18,9 @@ export const getTicketsAssociatedToUser = async (req: Request, res: Response) =>
 
   const newSort =
     req.query.sort == SortTypes.ASCENDING ? SortTypes.ASCENDING : SortTypes.DESCENDING;
-  filter = filter == UNDEFINED ? undefined : filter.toString();
+  filter = filter == UNDEFINED ? undefined : filter?.toString();
 
-  date = date == UNDEFINED ? undefined : date.toString();
+  date = date == UNDEFINED ? undefined : date?.toString();
   let from: Date, to: Date;
   if (date) {
     from = new Date(+date);
@@ -46,11 +46,9 @@ export const getTicketsAssociatedToUser = async (req: Request, res: Response) =>
     )
     .getRawMany();
 
-  res.status(StatusCodes.OK).json(
-    makeResponse(true, ResponseMessages.ACCEPT_POKERBOARD_INVITE_SUCCESS, {
-      ticketDetails: tickets,
-    }),
-  );
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.GET_TICKETS_SUCCESS, { ticketDetails: tickets }));
 };
 
 export const getUser = async (req: Request, res: Response) => {

@@ -10,7 +10,7 @@ export const findTickets = async (findOptions: FindManyOptions<Ticket>): Promise
   return ticketRepository.find(findOptions);
 };
 
-export const getTicketsDetails = async (pokerboard: Pokerboard) => {
+export const getTicketsDetails = async (pokerboard: Pokerboard): Promise<Ticket[]> => {
   const ticketRepository = customGetRepository(Ticket);
   const tickets = ticketRepository.find({
     where: { isActive: true, pokerboard: { id: pokerboard.id } },
@@ -22,6 +22,7 @@ export const getTicketsDetails = async (pokerboard: Pokerboard) => {
 
 export const saveTickets = async (tickets: TicketDetails[], pokerboard: Pokerboard) => {
   const ticketRepository = customGetRepository(Ticket);
+  const newTickets: Ticket[] = [];
   let count = (await pokerboard.tickets).length;
   tickets.forEach((ticket) => {
     const newTicket = ticketRepository.create();
@@ -32,7 +33,9 @@ export const saveTickets = async (tickets: TicketDetails[], pokerboard: Pokerboa
     newTicket.order = count + 1;
     newTicket.pokerboard = Promise.resolve(pokerboard);
     count += 1;
+    newTickets.push(newTicket);
   });
+  ticketRepository.save(newTickets);
 };
 
 export const updateTickets = async (tickets: Ticket[]): Promise<Ticket[]> => {

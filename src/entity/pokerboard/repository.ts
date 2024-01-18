@@ -33,12 +33,12 @@ export const createPokerboard = async (data: CreatePokerboard) => {
     relations: ['users'],
   };
   const groups = await findGroups(findGroupsOptions);
-  groups.forEach(async (group) => {
+  for (const group of groups) {
     const groupMembers = await group.users;
     groupMembers.forEach((member) => {
       usersSet.add(member.id);
     });
-  });
+  }
 
   const pokerboardRepository = customGetRepository(Pokerboard);
   const newPokerboard = pokerboardRepository.create({

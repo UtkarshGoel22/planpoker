@@ -37,7 +37,7 @@ export const findPokerboardsAssociatedToUser = async (user: User) => {
     })
     .leftJoin(Pokerboard, 'pokerboard', 'pokerboard.id = pokerboardId')
     .leftJoin(User, 'user', 'user.id = pokerboard.manager')
-    .select('user.user_name', 'createdBy')
+    .select('user.username', 'createdBy')
     .addSelect('pokerboard.id', 'id')
     .addSelect('pokerboard.manager', 'manager')
     .addSelect('pokerboard.deck_type', 'deckType')
@@ -59,21 +59,20 @@ export const getUsersDetails = async (pokerboard: Pokerboard) => {
   const userPokerboards = (await pokerboard.userPokerboard).filter(
     (userPokerboard) => userPokerboard.isActive === true,
   );
+  const usersDetails: UserDetails[] = [];
 
-  const usersDetail: UserDetails[] = [];
-
-  userPokerboards.forEach(async (userPokerboard) => {
+  for (const userPokerboard of userPokerboards) {
     const user = await userPokerboard.user;
-    usersDetail.push({
+    usersDetails.push({
       role: userPokerboard.role,
       userId: userPokerboard.userId,
       name: user.firstName + ' ' + user.lastName,
       email: user.email,
       inviteStatus: userPokerboard.inviteStatus,
     });
-  });
+  }
 
-  return usersDetail;
+  return usersDetails;
 };
 
 export const saveUserPokerboard = async (
