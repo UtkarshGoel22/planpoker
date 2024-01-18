@@ -15,6 +15,7 @@ const config = {
     SENDER_PASSWORD: process.env.SENDER_EMAIL_PASSWORD,
     SERIVCE_TYPE: process.env.EMAIL_SERVICE_TYPE,
   },
+  JIRA_AUTH: process.env.JIRA_AUTH,
   JWT: { EXPIRY: process.env.JWT_EXPIRY, SECRECT: process.env.JWT_SECRET },
   NODE_ENV: process.env.NODE_ENV || Environments.DEV,
   SEARCH: { LIMIT: 10 },

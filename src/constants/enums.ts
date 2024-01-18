@@ -14,6 +14,12 @@ export enum EmailSubject {
   VERIFICATION_SUCCESS = 'Account verified successfully!!',
 }
 
+export const enum ImportByType {
+  ID = 'ID',
+  SPRINT = 'SPRINT',
+  JQL = 'JQL',
+}
+
 export enum InviteStatus {
   ACCEPTED = 'ACCEPTED',
   PENDING = 'PENDING',
