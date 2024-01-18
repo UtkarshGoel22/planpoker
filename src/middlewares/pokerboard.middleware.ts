@@ -9,7 +9,7 @@ import { makeResponse } from '../utils/common';
 
 export const acceptInviteValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    req.body = validateAcceptPokerboardInviteData(req.body);
+    req.query = validateAcceptPokerboardInviteData(req.query);
   } catch (error) {
     return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, error.message, error.data));
   }
