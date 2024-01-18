@@ -1,6 +1,4 @@
-export const Regex = {
-  ALPHANUMERIC: /^[a-zA-Z0-9]+$/,
-};
+export const ONE_DAY = 86400000;
 
 export const ColumnNames = {
   COUNT_OF_MEMBERS: 'count_of_members',
@@ -24,9 +22,14 @@ export const Environments = {
   TEST: 'test',
 };
 
+export const Regex = {
+  ALPHANUMERIC: /^[a-zA-Z0-9]+$/,
+};
+
 export const TableNames = {
   USER_POKERBOARD: 'user_pokerboard',
   USER_TICKET: 'user_ticket',
 };
 
+export const UNDEFINED = 'undefined';
 export const UNREGISTERED = 'unregistered';
