@@ -46,6 +46,6 @@ router.get('/group', searchValidation, searchGroup);
 
 router.get('/groups', tokenValidation, getGroupsAssociatedToUser);
 
-router.get('/pokerboard', tokenValidation, getPokerboardsAssociatedToUser);
+router.get('/pokerboards', tokenValidation, getPokerboardsAssociatedToUser);
 
 export default router;

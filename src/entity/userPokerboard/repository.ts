@@ -37,7 +37,7 @@ export const findPokerboardsAssociatedToUser = async (user: User) => {
     })
     .leftJoin(Pokerboard, 'pokerboard', 'pokerboard.id = pokerboardId')
     .leftJoin(User, 'user', 'user.id = pokerboard.manager')
-    .select('user.user_name', 'createdBy')
+    .select('user.username', 'createdBy')
     .addSelect('pokerboard.id', 'id')
     .addSelect('pokerboard.manager', 'manager')
     .addSelect('pokerboard.deck_type', 'deckType')
