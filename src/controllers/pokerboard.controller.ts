@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { In } from 'typeorm';
 
 import { ErrorMessages, ResponseMessages } from '../constants/message';
-import { ImportByType, InviteStatus } from '../constants/enums';
+import { ImportByTypes, InviteStatus } from '../constants/enums';
 import { getGroupsDetails } from '../entity/group/repository';
 import { createPokerboard } from '../entity/pokerboard/repository';
-import { getTicketsDetails } from '../entity/ticket/repository';
+import { findTickets, getTicketsDetails, saveTickets } from '../entity/ticket/repository';
 import {
   importTicketsById,
   importTicketsByJQL,
@@ -16,8 +17,40 @@ import {
   getUsersDetails,
   saveUserPokerboard,
 } from '../entity/userPokerboard/repository';
+import { TicketDetails } from '../types';
 import { makeResponse } from '../utils/common';
 import { setImportTicketResposneMessage } from '../utils/jira';
+
+export const addTicketsToPokerboard = async (req: Request, res: Response) => {
+  const pokerboard = req.pokerboard;
+  let { tickets } = req.body;
+  const ticketIds = tickets.map((ticket: TicketDetails) => ticket.id);
+  const ticketsData = await findTickets({ where: { id: In(ticketIds) } });
+
+  if (ticketsData.length === 0) {
+    // All the tickets to be added do not exist in the database.
+    await saveTickets(tickets, pokerboard);
+    return res
+      .status(StatusCodes.OK)
+      .json(makeResponse(true, ResponseMessages.TICKETS_ADDED_SUCCESSFULLY));
+  } else if (ticketsData.length === ticketIds.length) {
+    // All the tickets to be added already exist in the database.
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json(makeResponse(false, ErrorMessages.ALL_TICKETS_ALREADY_EXIST));
+  } else {
+    // Some tickets already exist in the database.
+    const alreadyExistingTicketIds = ticketsData.map((ticket) => ticket.id);
+    const data = { partialExist: alreadyExistingTicketIds };
+    tickets = tickets.filter((ticket: TicketDetails) =>
+      alreadyExistingTicketIds.includes(ticket.id),
+    );
+    await saveTickets(tickets, pokerboard);
+    return res
+      .status(StatusCodes.OK)
+      .json(makeResponse(true, ResponseMessages.SOME_TICKETS_ADDED_SUCCESSFULLY, data));
+  }
+};
 
 export const acceptPokerboardInvite = async (req: Request, res: Response) => {
   const { pokerboardId } = req.query;
@@ -88,11 +121,11 @@ export const importTicketsInPokerboard = async (req: Request, res: Response) => 
   let result = {};
 
   try {
-    if (importBy === ImportByType.ID) {
+    if (importBy === ImportByTypes.ID) {
       result = await importTicketsById(ticketsInput);
-    } else if (importBy === ImportByType.JQL) {
+    } else if (importBy === ImportByTypes.JQL) {
       result = await importTicketsByJQL(ticketsInput, startAt);
-    } else if (importBy == ImportByType.SPRINT) {
+    } else if (importBy == ImportByTypes.SPRINT) {
       result = await importTicketsBySprint(ticketsInput, startAt);
     }
     res

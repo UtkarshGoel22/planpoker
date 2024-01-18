@@ -7,9 +7,9 @@ import { Pokerboard } from '../entity/pokerboard/model';
 import { createPokerboardInvites } from '../entity/pokerboardInvite/repository';
 import { User } from '../entity/user/model';
 import {
-  acceptPokerboardInviteSchema,
-  createPokerboardSchema,
-  pokerboardIdSchema,
+  AcceptPokerboardInviteSchema,
+  CreatePokerboardSchema,
+  PokerboardIdSchema,
 } from '../schemas/pokerboard.schema';
 import { validateData } from '../utils/common';
 import { getTicketsFromJIRA } from '../utils/jira';
@@ -113,7 +113,7 @@ export const sendInvitationMailToVerifiedUsers = async (users: User[], pokerboar
 
 export const validateAcceptPokerboardInviteData = (data: object) => {
   try {
-    return validateData(acceptPokerboardInviteSchema, data);
+    return validateData(AcceptPokerboardInviteSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
@@ -121,7 +121,7 @@ export const validateAcceptPokerboardInviteData = (data: object) => {
 
 export const validateCreatePokerboardData = (data: object) => {
   try {
-    return validateData(createPokerboardSchema, data);
+    return validateData(CreatePokerboardSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
@@ -129,7 +129,7 @@ export const validateCreatePokerboardData = (data: object) => {
 
 export const validatePokerboardId = (data: object) => {
   try {
-    return validateData(pokerboardIdSchema, data);
+    return validateData(PokerboardIdSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }

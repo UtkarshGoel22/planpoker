@@ -32,6 +32,19 @@ export const createPokerboardValidation = async (
   next();
 };
 
+export const managerPermission = async (req: Request, res: Response, next: NextFunction) => {
+  const pokerboard = req.pokerboard;
+  const user = req.user;
+  if (pokerboard.manager !== user.id) {
+    const errorData = { permission: ErrorMessages.PERMISSION_DENIED };
+    return res
+      .status(StatusCodes.FORBIDDEN)
+      .json(makeResponse(false, ErrorMessages.PERMISSION_DENIED, errorData));
+  } else {
+    next();
+  }
+};
+
 export const pokerboardIdValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
     req.params = validatePokerboardId(req.params);

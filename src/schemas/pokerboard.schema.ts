@@ -5,7 +5,7 @@ import { FieldConstraints, FieldNames } from '../constants/field';
 import { ValidationMessages } from '../constants/message';
 import { DeckTypes } from '../constants/enums';
 
-const userSchema = z.object({
+const UserSchema = z.object({
   id: z
     .string({ required_error: ValidationMessages.ID_REQUIRED })
     .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.ID_REQUIRED),
@@ -14,11 +14,11 @@ const userSchema = z.object({
     .email(ValidationMessages.INVALID_EMAIL),
 });
 
-export const acceptPokerboardInviteSchema = z.object({
+export const AcceptPokerboardInviteSchema = z.object({
   pokerboardId: z.string({ required_error: ValidationMessages.POKERBOARD_ID_REQUIRED }),
 });
 
-export const createPokerboardSchema = z
+export const CreatePokerboardSchema = z
   .object({
     name: z
       .string({ required_error: ValidationMessages.POKERBOARD_NAME_REQUIRED })
@@ -41,7 +41,7 @@ export const createPokerboardSchema = z
         }
       },
     }),
-    users: z.array(userSchema, { required_error: ValidationMessages.USERS_REQUIRED }),
+    users: z.array(UserSchema, { required_error: ValidationMessages.USERS_REQUIRED }),
     groups: z.array(z.string().min(FieldConstraints.REQUIRED_FIELD), {
       required_error: ValidationMessages.GROUPS_REQUIRED,
     }),
@@ -51,7 +51,7 @@ export const createPokerboardSchema = z
     path: [FieldNames.MIN_MEMBERS],
   });
 
-export const pokerboardIdSchema = z.object({
+export const PokerboardIdSchema = z.object({
   id: z
     .string({ required_error: ValidationMessages.ID_REQUIRED })
     .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.ID_REQUIRED),

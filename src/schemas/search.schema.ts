@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ValidationMessages } from '../constants/message';
 import config from '../settings/config';
 
-export const searchSchema = z.object({
+export const SearchSchema = z.object({
   searchKey: z.string().optional().default(''),
   limit: z
     .string()

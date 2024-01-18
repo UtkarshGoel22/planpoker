@@ -7,11 +7,11 @@ import { findInvites, updateInvites } from '../entity/pokerboardInvite/repositor
 import { createUserPokerboards } from '../entity/userPokerboard/repository';
 import { findUser } from '../entity/user/repository';
 import {
-  loginSchema,
-  registrationSchema,
-  userReverificationSchema,
-  userUpdationSchema,
-  userVerificationSchema,
+  LoginSchema,
+  RegistrationSchema,
+  UserReverificationSchema,
+  UserUpdationSchema,
+  UserVerificationSchema,
 } from '../schemas/user.schema';
 import { validateData } from '../utils/common';
 import { sendMail } from '../utils/notification';
@@ -43,7 +43,7 @@ export const updatePendingInvitesToPokerboards = async (email: string) => {
 
 export const validateUserLoginData = (data: object) => {
   try {
-    return validateData(loginSchema, data);
+    return validateData(LoginSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD, data: error.data };
   }
@@ -51,7 +51,7 @@ export const validateUserLoginData = (data: object) => {
 
 export const validateUserRegistrationData = (data: object) => {
   try {
-    return validateData(registrationSchema, data);
+    return validateData(RegistrationSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
@@ -59,7 +59,7 @@ export const validateUserRegistrationData = (data: object) => {
 
 export const validateUserReverificationData = (data: object) => {
   try {
-    return validateData(userReverificationSchema, data);
+    return validateData(UserReverificationSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
@@ -67,7 +67,7 @@ export const validateUserReverificationData = (data: object) => {
 
 export const validateUserUpdationData = (data: object) => {
   try {
-    return validateData(userUpdationSchema, data);
+    return validateData(UserUpdationSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
@@ -75,7 +75,7 @@ export const validateUserUpdationData = (data: object) => {
 
 export const validateUserVerificationData = (data: object) => {
   try {
-    return validateData(userVerificationSchema, data);
+    return validateData(UserVerificationSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }

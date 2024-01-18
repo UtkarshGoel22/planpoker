@@ -1,4 +1,4 @@
-import { DeckTypes } from './constants/enums';
+import { DeckTypes, TicketTypes } from './constants/enums';
 
 export type CreateGroup = {
   name: string;
@@ -35,6 +35,14 @@ export type GroupDetails = {
   admin: string;
   countOfMembers: number;
   member?: string;
+};
+
+export type TicketDetails = {
+  id: string;
+  summary: string;
+  description: string;
+  estimate: number;
+  type: TicketTypes;
 };
 
 export type UserDetails = {

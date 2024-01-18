@@ -4,7 +4,7 @@ import { Regex } from '../constants/common';
 import { FieldConstraints } from '../constants/field';
 import { ValidationMessages } from '../constants/message';
 
-export const createGroupSchema = z.object({
+export const CreateGroupSchema = z.object({
   name: z
     .string({ required_error: ValidationMessages.GROUP_NAME_REQUIRED })
     .min(FieldConstraints.USERNAME.MIN, ValidationMessages.GROUP_NAME_MIN_LENGTH)

@@ -1,10 +1,10 @@
 import { ErrorMessages } from '../constants/message';
-import { CreateGroupSchema } from '../schemas/group.schema';
+import { TicketsSchema } from '../schemas/ticket.schema';
 import { validateData } from '../utils/common';
 
-export const validateCreateGroupData = (data: object) => {
+export const validateTicketData = (data: object) => {
   try {
-    return validateData(CreateGroupSchema, data);
+    return validateData(TicketsSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }
