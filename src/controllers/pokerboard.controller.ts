@@ -62,9 +62,9 @@ export const createUserPokerboard = async (req: Request, res: Response) => {
 
 export const getPokerboard = async (req: Request, res: Response) => {
   const pokerboard = req.pokerboard;
-  const groups = getGroupsDetails(pokerboard);
-  const tickets = getTicketsDetails(pokerboard);
-  const users = getUsersDetails(pokerboard);
+  const groups = await getGroupsDetails(pokerboard);
+  const tickets = await getTicketsDetails(pokerboard);
+  const users = await getUsersDetails(pokerboard);
   const pokerboardData = {
     id: pokerboard.id,
     name: pokerboard.name,
