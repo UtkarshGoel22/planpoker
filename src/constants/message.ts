@@ -106,7 +106,7 @@ export const ValidationMessages = {
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
   PASSWORD_REQUIRED: 'Password is a required field',
-  POKERBOARD_ID_REQUIRED: 'Pokerboard Id is a required field',
+  POKERBOARD_ID_REQUIRED: 'Pokerboard id is a required field',
   POKERBOARD_MIN_MEMBERS: 'Add at least one user or group to create the pokerboard',
   POKERBOARD_NAME_MAX_LENGTH: 'Pokerboard name length can be upto 30',
   POKERBOARD_NAME_MIN_LENGTH: 'Pokerboard name length must be atleast 6',

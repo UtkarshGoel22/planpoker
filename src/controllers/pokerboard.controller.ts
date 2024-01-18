@@ -82,9 +82,9 @@ export const getPokerboard = async (req: Request, res: Response) => {
 
 export const importTicketsInPokerboard = async (req: Request, res: Response) => {
   let { ticketsInput, importBy, startAt } = req.query;
-  ticketsInput = ticketsInput.toString();
-  importBy = importBy.toString();
-  startAt = ticketsInput.toString();
+  ticketsInput = ticketsInput?.toString();
+  importBy = importBy?.toString();
+  startAt = startAt?.toString();
   let result = {};
 
   try {
