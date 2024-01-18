@@ -10,7 +10,7 @@ export const findTickets = async (findOptions: FindManyOptions<Ticket>): Promise
   return ticketRepository.find(findOptions);
 };
 
-export const getTicketsDetails = async (pokerboard: Pokerboard) => {
+export const getTicketsDetails = async (pokerboard: Pokerboard): Promise<Ticket[]> => {
   const ticketRepository = customGetRepository(Ticket);
   const tickets = ticketRepository.find({
     where: { isActive: true, pokerboard: { id: pokerboard.id } },

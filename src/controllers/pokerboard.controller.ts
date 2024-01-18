@@ -95,9 +95,9 @@ export const createUserPokerboard = async (req: Request, res: Response) => {
 
 export const getPokerboard = async (req: Request, res: Response) => {
   const pokerboard = req.pokerboard;
-  const groups = getGroupsDetails(pokerboard);
-  const tickets = getTicketsDetails(pokerboard);
-  const users = getUsersDetails(pokerboard);
+  const groups = await getGroupsDetails(pokerboard);
+  const tickets = await getTicketsDetails(pokerboard);
+  const users = await getUsersDetails(pokerboard);
   const pokerboardData = {
     id: pokerboard.id,
     name: pokerboard.name,
@@ -115,9 +115,9 @@ export const getPokerboard = async (req: Request, res: Response) => {
 
 export const importTicketsInPokerboard = async (req: Request, res: Response) => {
   let { ticketsInput, importBy, startAt } = req.query;
-  ticketsInput = ticketsInput.toString();
-  importBy = importBy.toString();
-  startAt = ticketsInput.toString();
+  ticketsInput = ticketsInput?.toString();
+  importBy = importBy?.toString();
+  startAt = startAt?.toString();
   let result = {};
 
   try {
