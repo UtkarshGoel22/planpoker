@@ -1,4 +1,4 @@
-import { FindManyOptions, In } from 'typeorm';
+import { FindManyOptions, FindOneOptions, In } from 'typeorm';
 
 import { UNREGISTERED } from '../../constants/common';
 import { PokerboardStatus } from '../../constants/enums';
@@ -33,12 +33,12 @@ export const createPokerboard = async (data: CreatePokerboard) => {
     relations: ['users'],
   };
   const groups = await findGroups(findGroupsOptions);
-  groups.forEach(async (group) => {
+  for (const group of groups) {
     const groupMembers = await group.users;
     groupMembers.forEach((member) => {
       usersSet.add(member.id);
     });
-  });
+  }
 
   const pokerboardRepository = customGetRepository(Pokerboard);
   const newPokerboard = pokerboardRepository.create({
@@ -58,6 +58,13 @@ export const createPokerboard = async (data: CreatePokerboard) => {
   sendInvitationMailToUnregisteredUsers(unregisteredUserEmails, newPokerboard);
 
   return newPokerboard;
+};
+
+export const findPokerboard = async (
+  findOptions: FindOneOptions<Pokerboard>,
+): Promise<Pokerboard> => {
+  const pokerboardRepository = customGetRepository(Pokerboard);
+  return pokerboardRepository.findOne(findOptions);
 };
 
 export const findPokerboards = async (

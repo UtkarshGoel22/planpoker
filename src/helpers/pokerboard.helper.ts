@@ -6,7 +6,11 @@ import { EmailMessages, ErrorMessages } from '../constants/message';
 import { Pokerboard } from '../entity/pokerboard/model';
 import { createPokerboardInvites } from '../entity/pokerboardInvite/repository';
 import { User } from '../entity/user/model';
-import { acceptPokerboardInviteSchema, createPokerboardSchema } from '../schemas/pokerboard.schema';
+import {
+  acceptPokerboardInviteSchema,
+  createPokerboardSchema,
+  pokerboardIdSchema,
+} from '../schemas/pokerboard.schema';
 import { validateData } from '../utils/common';
 import { getTicketsFromJIRA } from '../utils/jira';
 import { sendBulkMails } from '../utils/notification';
@@ -118,6 +122,14 @@ export const validateAcceptPokerboardInviteData = (data: object) => {
 export const validateCreatePokerboardData = (data: object) => {
   try {
     return validateData(createPokerboardSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
+  }
+};
+
+export const validatePokerboardId = (data: object) => {
+  try {
+    return validateData(pokerboardIdSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }

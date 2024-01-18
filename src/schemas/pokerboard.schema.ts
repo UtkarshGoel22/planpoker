@@ -50,3 +50,9 @@ export const createPokerboardSchema = z
     message: ValidationMessages.MINIMUM_MEMBERS,
     path: [FieldNames.MIN_MEMBERS],
   });
+
+export const pokerboardIdSchema = z.object({
+  id: z
+    .string({ required_error: ValidationMessages.ID_REQUIRED })
+    .min(FieldConstraints.REQUIRED_FIELD, ValidationMessages.ID_REQUIRED),
+});

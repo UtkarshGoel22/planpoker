@@ -3,13 +3,19 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ErrorMessages, ResponseMessages } from '../constants/message';
 import { ImportByType, InviteStatus } from '../constants/enums';
+import { getGroupsDetails } from '../entity/group/repository';
 import { createPokerboard } from '../entity/pokerboard/repository';
-import { findUserPokerboard, saveUserPokerboard } from '../entity/userPokerboard/repository';
+import { getTicketsDetails } from '../entity/ticket/repository';
 import {
   importTicketsById,
   importTicketsByJQL,
   importTicketsBySprint,
 } from '../helpers/pokerboard.helper';
+import {
+  findUserPokerboard,
+  getUsersDetails,
+  saveUserPokerboard,
+} from '../entity/userPokerboard/repository';
 import { makeResponse } from '../utils/common';
 import { setImportTicketResposneMessage } from '../utils/jira';
 
@@ -52,6 +58,26 @@ export const createUserPokerboard = async (req: Request, res: Response) => {
   return res
     .status(StatusCodes.CREATED)
     .json(makeResponse(true, ResponseMessages.POKERBOARD_CREATE_SUCCESS, pokerboard));
+};
+
+export const getPokerboard = async (req: Request, res: Response) => {
+  const pokerboard = req.pokerboard;
+  const groups = await getGroupsDetails(pokerboard);
+  const tickets = await getTicketsDetails(pokerboard);
+  const users = await getUsersDetails(pokerboard);
+  const pokerboardData = {
+    id: pokerboard.id,
+    name: pokerboard.name,
+    manager: pokerboard.manager,
+    deckType: pokerboard.deckType,
+    status: pokerboard.status,
+    groups: groups,
+    tickets: tickets,
+    users: users,
+  };
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.GET_POKERBOARD_SUCCESS, pokerboardData));
 };
 
 export const importTicketsInPokerboard = async (req: Request, res: Response) => {
