@@ -104,7 +104,7 @@ export const testUserRegistration = () => {
       expect(response.data).toEqual({
         success: false,
         message: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
-        data: { duplicateEntry: ErrorMessages.ACCOUNT_ALREADY_EXISTS },
+        data: { email: ErrorMessages.ACCOUNT_ALREADY_EXISTS },
       });
     });
 

@@ -82,7 +82,8 @@ export const ResponseMessages = {
   LOGIN_SUCCESS: 'Logged in successfully',
   LOGOUT_SUCCESS: 'Logged out successfully',
   POKERBOARD_CREATE_SUCCESS: 'Pokerboard created successfully',
-  REGISTRATION_SUCCESS: 'Account created successfully',
+  REGISTRATION_SUCCESS:
+    'Registered successfully. Please click on the email verification link sent to the provided email address.',
   SOME_TICKETS_ADDED_SUCCESSFULLY:
     'Some ticket already exist. Rest of the tickets were saved successfully',
   TICKETS_ADDED_SUCCESSFULLY: 'Tickets added successfully',
