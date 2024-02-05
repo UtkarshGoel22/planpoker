@@ -25,7 +25,7 @@ export const createUser = async (data: CreateUser): Promise<User> => {
     return await userRepository.save(newUser);
   } catch (error) {
     const errorData: { [key: string]: string } = {
-      duplicateEntry: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
+      email: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
     };
     throw {
       statusCode: StatusCodes.BAD_REQUEST,
