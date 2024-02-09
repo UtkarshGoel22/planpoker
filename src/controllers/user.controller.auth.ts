@@ -1,45 +1,29 @@
+import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { SuccessMessage } from '../constants/message';
-import { Token } from '../entity/Token';
-import { generateCustomResponse } from '../middlewares/user.validation';
-import ResponseMessage from '../models/ResponseMessage';
-import { checkPasswordAndGenerateToken } from '../repositories/user.repository';
+
+import { ResponseMessages } from '../constants/message';
+import { createToken, findAndUpdateToken } from '../entity/token/repository';
+import { comparePassword } from '../utils/auth';
+import { makeResponse } from '../utils/common';
 
 export const loginUser = async (req: Request, res: Response) => {
-  const responseMessage: ResponseMessage = {
-    success: false,
-    message: '',
-    data: undefined,
-  };
+  const user = req.user;
+  const { password, ...userData } = user;
 
   try {
-    let { token, userId } = await checkPasswordAndGenerateToken(
-      req.body.email,
-      req.body.password
-    );
-    responseMessage.success = true;
-    responseMessage.message = SuccessMessage.LOGIN_SUCCESSFUL;
-    responseMessage.data = { token, userId };
-    return res.status(200).json(responseMessage);
-  } catch (errorObject) {
-    return res
-      .status(400)
-      .json(generateCustomResponse(false, errorObject.message, errorObject.errData));
+    await comparePassword(req.body.password, password);
+  } catch (error) {
+    return res.status(error.statusCode).json(makeResponse(false, error.message, error.data));
   }
+
+  const { token } = await createToken(user);
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.LOGIN_SUCCESS, { token, userData }));
 };
 
 export const logoutUser = async (req: Request, res: Response) => {
-  let tokenId = req.get('authorization').slice(7);
-  let date = new Date();
-  await getRepository(Token).update(
-    { id: tokenId },
-    { expiredAt: date, isActive: false }
-  );
-  let message: ResponseMessage = {
-    data: undefined,
-    message: SuccessMessage.LOGOUT_SUCCESSFUL,
-    success: true,
-  };
-  return res.status(200).json(message);
+  const currentDate = new Date();
+  await findAndUpdateToken({ id: req.token.id }, { expiredAt: currentDate, isActive: false });
+  return res.status(StatusCodes.OK).json(makeResponse(true, ResponseMessages.LOGOUT_SUCCESS));
 };

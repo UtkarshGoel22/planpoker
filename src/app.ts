@@ -1,46 +1,29 @@
-import 'reflect-metadata';
-import { Server } from 'http';
 import cors from 'cors';
-import socketIo from 'socket.io';
-import { createConnection } from 'typeorm';
-import * as dotenv from 'dotenv';
-import express = require('express');
-import ormconfig from './config/ormconfig';
-import { Message } from './constants/message';
-import userRouter from './routes/userRoute';
-import { ROUTES } from './constants/routes';
-import pokerBoardRoute from './routes/pokerBoardRoute';
-import { socketValidation } from './middlewares/socket.io.validation';
-import { game } from './services/game';
-import usersRouter from './routes/usersRoutes';
+import express from 'express';
 
-dotenv.config();
+import { Routes } from './constants/enums';
+import pokerboardRouter from './routes/pokerboard.route';
+import userRouter from './routes/user.route';
+import usersRouter from './routes/users.route';
+import config from './settings/config';
 
-const app = express();
-const server = new Server(app);
-export const io = new socketIo.Server(server, {
-  cors: {
-    origin: process.env.ORIGIN,
-  },
-});
+class App {
+  public app: express.Application;
 
-createConnection(ormconfig)
-  .then(() => {
-    console.log(Message.connectedToMysql);
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: false }));
+  constructor() {
+    this.app = express();
+    this.config();
+  }
 
-    app.use(cors());
+  private config(): void {
+    this.app.set('port', config.PORT);
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(cors());
+    this.app.use(Routes.USER, userRouter);
+    this.app.use(Routes.USERS, usersRouter);
+    this.app.use(Routes.POKERBOARD, pokerboardRouter);
+  }
+}
 
-    app.use(ROUTES.USER, userRouter);
-    app.use(ROUTES.USERS, usersRouter);
-    app.use(ROUTES.POKER_BOARD, pokerBoardRoute);
-    server.listen(process.env.PORT || 3000, () => {
-      console.log(Message.serverRunningOnPort, process.env.PORT);
-    });
-  })
-  .catch((error) => console.log(error));
-
-io.use(async (socket, next) => socketValidation(socket, next));
-
-game();
+export default new App().app;

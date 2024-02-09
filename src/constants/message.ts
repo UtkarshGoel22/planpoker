@@ -1,139 +1,140 @@
-import { ROUTES } from './routes';
-import dotenv from 'dotenv';
-dotenv.config();
+import config from '../settings/config';
+import { Routes } from './enums';
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'shshshsh';
-
-export const APP_URL = process.env.ORIGIN || 'http://localhost:3000';
-export const TableName = {
-  userPokerboard: 'user_pokerboard',
-  userTicket: 'user_ticket',
-};
-export const TEXT = {
-  undefined: 'undefined',
-};
-
-export const Message = {
-  connectedToMysql: 'Connected to mysql',
-  serverRunningOnPort: 'Sever running on port',
-  welcomeMessage: (token: string) => `<body>
-  <h1> Welcome to Poker Planner!! </h1> 
-  <p> Thankyou for registering to our app. Visit our website to start planning for your next project. </p>
-  <span> Verify your account by clicking to this link: ${APP_URL}${ROUTES.USER}/verify?token=${token}
-  </body>`,
-  verifyAgain: (token: string) => `<body>
-  <h1> Email Verification </h1> 
-  <p> Verify your account by clicking to this link: ${APP_URL}${ROUTES.USER}/verify?token=${token} </p>
-  </body>`,
-  addedToGroup: (
+export const EmailMessages = {
+  ADDED_TO_GROUP: (
     groupName: string,
-    firstName: string,
-    lastName: string,
-    email: string
+    adminFirstName: string,
+    adminLastName: string,
+    adminEmail: string,
   ) => `<body>
-  <h1> You were added to a group ${groupName} </h1> 
-  <p> ${firstName} ${lastName} whose email is ${email} added you to group </p>
+  <h1> You are added to a new group ${groupName} </h1>
+  <p> ${adminFirstName} ${adminLastName} having email as ${adminEmail} added you to the group. </p>
   </body>`,
-  addedToPokerBoard: (pokerBoardName: string, pokerBoardId: string) => `
-  <body>
-  <h1> Invitation to ${pokerBoardName} poker-board </h1> 
-  <p> You are invited to join the ${pokerBoardName} poker-board game  </p>
-  <span> Invitation Link ${APP_URL}/poker-board/invite?pokerBoardId=${pokerBoardId}
+  INVITE_FOR_SIGN_UP: (pokerboardName: string) => `<body>
+  <h1> Invitation to join ${pokerboardName} pokerboard </h1> 
+  <p> You are invited to join the ${pokerboardName} pokerboard game </p>
+  <span> Please signup and accept the invitation to continue: ${config.APP_URL}/signup </span>
   </body>`,
-  inviteForSignup: (pokerBoardName: string) => `
-  <h1> Invitation to ${pokerBoardName} poker-board </h1> 
-  <p> You are invited to join the ${pokerBoardName} poker-board game  </p>
-  <span> Please signup and accept the invitation to continue:  ${APP_URL}/signup
+  POKERBOARD_INVITATION: (pokerboardName: string, pokerboardId: string) => `<body>
+  <h1> Invitation to join ${pokerboardName} pokerboard </h1>
+  <p> You are invited to join the ${pokerboardName} pokerboard game </p>
+  <span> Invitation Link ${config.APP_URL}/${Routes.POKERBOARD}/invite?pokerboardId=${pokerboardId} </span>
+  </body>`,
+  REGISTRATION_SUCCESS: (token: string) => `<body>
+  <h1> Welcome to Plan Poker!! </h1> 
+  <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
+  <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
+  </body>`,
+  VERIFY_EMAIL: (token: string) => `<body>
+  <h1> Email address verification </h1>
+  <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
+  </body>`,
+  VERIFICATION_SUCCESS: `<body>
+  <h1> Account Verified Successfully!! </h1>
+  <p> Your account has been verified successfully. Login to your account and start planning poker. </p>
   </body>`,
 };
 
-export const enum SuccessMessage {
-  CREATED = 'Account created successfully',
-  EMAIL_SUBJECT = 'Registered successfully!!',
-  VERIFY_EMAIL_SUBJECT = 'Email verification',
-  VERIFY_SUCCESS = 'Your Account has been successfully verified',
-  REVERIFICATION_SUCCESS = 'Verification Linked sent successfully',
-  VERIFY_SUCCESS_SUBJECT = 'Account Verified Successfully',
-  LOGIN_SUCCESSFUL = 'Login successful',
-  LOGOUT_SUCCESSFUL = 'Logged out successfully',
-  GET_USER_SUCCESSFUL = 'Fetched user details successfully',
-  UPDATE_USER_SUCCESSFUL = 'Updated user details successfully',
-  ADD_TO_GROUP_SUBJECT = 'Added to new group',
-  SAVE_GROUP_SUCCESSFUL = 'Group saved successfully',
-  GROUP_SEARCH_SUCCESSFUL = 'Search successful',
-  POKER_BOARD_CREATED_SUCCESSFULLY = 'Poker-board created successfully',
-  IMPORTED_TICKETS_SUCCESSFULLY = 'Successfully imported tickets',
-  ACCEPT_BOARD_INVITATION = 'You were added to poker-board successfully',
-  TICKET_SAVED = 'Tickets saved successfully',
-  TICKETS_UPDATE = 'Tickets update successfully',
-  UPDATED = 'Updated successfully',
-  PARTIAL_SAVED = 'Some ticket already exist. Rest of the tickets were saved successfully',
-  FETCHED_DETAILS_SUCCESSFULLY = 'Details fetched successfully',
-}
+export const ErrorMessages = {
+  ACCOUNT_ALREADY_EXISTS: 'Account already exists',
+  ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
+  ACCOUNT_NOT_VERIFIED: 'Your account in not verified. Kindly verify your account',
+  ACCOUNT_VERIFICATION_FAILED: 'Account verfication failed',
+  ACCOUNT_VERIFICATION_FAILED_DUE_TO_EXPIRED_TOKEN:
+    'Account verfication failed. The link has expired',
+  ACCOUNT_VERIFICATION_FAILED_DUE_TO_INVALID_TOKEN: 'Account verification failed. Invalid token',
+  ALL_TICKETS_ALREADY_EXIST: 'All the tickets already exist',
+  GROUP_NAME_ALREADY_EXISTS: 'Group with the given name already exists',
+  INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
+  INCORRECT_INPUT: 'Incorrect input',
+  INVALID_POKERBOARD_ID: 'Pokerboard that you are trying to view does not exist',
+  INVALID_REQUEST_DATA: 'Invalid request data',
+  INVITE_ALREADY_ACCEPTED: 'You have already accepted the invite',
+  INVITE_ALREADY_REJECTED: 'You have already rejected the invite',
+  NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL: 'No account associated with the given email',
+  NO_TICKETS_FOUND: 'No tickets found',
+  NOT_INVITED_TO_POKERBOARD: 'You are not invited for this pokerboard game',
+  PERMISSION_DENIED: 'You do not have enough permissions to perform this action',
+  SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
+  UNAUTHORIZED_ACCESS: 'You do not have access to perform the action',
+  USERS_NOT_FOUND: 'Users you are trying to add do not exist',
+};
 
-export const enum ErrorMessage {
-  DUPLICATE_ENTRY = 'Account already exists',
-  SOMETHING_WENT_WRONG = 'Something went wrong',
-  VERIFICATION_FAILED = 'Verification failed',
-  JSON_PARSE_ERROR = 'Please provide json object in request body',
-  UNABLE_TO_SEND_MESSAGE = 'Unable to send message, please try again after sometime',
-  EMAIL_NOT_FOUND = 'No account associated with this email',
-  ACCOUNT_NOT_VERIFIED = 'Your account is not verified. Kindly verify your account',
-  INVALID_PASSWORD = 'You have entered a wrong password',
-  ACCOUNT_ALREADY_VERIFIED = 'Account is already verified',
-  UPDATE_USER_FAILED = 'Update user details failed',
-  GET_USER_FAILED = 'Get user details failed',
-  SAVE_GROUP_FAILED = 'Saving group failed',
-  SOMETHING_WENT_WRONG_WHILE_CREATING_POKER_BOARD = 'Something went wrong while creating the poker-board. Please try again',
-  YOU_ARE_NOT_INVITED_TO_THIS_GAME = "We can't find any invitation for you regarding this game",
-  YOU_HAVE_ALREADY_ACCEPTED_YOUR_INVITATION = 'You already have accepted the invitation',
-  INVALID_POKERBOARD_ID = `Pokerboard that you are trying to view does't exist`,
-  AT_LEAST_GROUP_OR_USER = 'You should add at least one user or group to create a poker board',
-  NOT_FOUND = 'Not Found',
-  ADD_TICKET_PERMISSION_DENIED = `You don't have permission to add ticket`,
-  UPDATE_TICKET_PERMISSION_DENIED = `You don't have permission to update ticket`,
-  PERMISSION_DENIED = `You don't have Permission`,
-  ALL_TICKETS_ALREADY_EXIST = 'All tickets already exist',
-  INVALID_USER_ID = `User you are looking for is not present`,
-  USERNAME_ALREADY_EXIST = 'Username already exists',
-  INCORRECT_INPUT = 'Incorrect input',
-  NO_TICKETS_FOUND = 'No tickets found',
-  PASSWORD_DOES_NOT_MATCH = 'Password does not match',
-  USERS_NOT_FOUND = 'Users you want to add do not exist',
-  YOU_HAVE_ALREADY_REJECTED_THE_INVITE = 'You have already rejected the invite',
-  NO_ESTIMATE_FOUND_FOR_THIS_TICKET = `We can't find any estimate details for this account`,
-  TICKET_DOES_NOT_EXIST_FOR_THIS_POKERBOARD = `We can't found any ticket with this given ticket id`,
-}
+export const LogMessages = {
+  DATABASE_CONNECTION_FAILURE: 'TypeORM encountered error while connecting to database:',
+  DATABASE_CONNECTION_SUCCESS: 'Successfully connected to database',
+  LISTENING_ON_PORT: 'Listening on port',
+  PASSWORD_HASHING_FAILURE: 'Error while hashing password:',
+  PASSWORD_VERIFICATION_FAILURE: 'Error while verifying password',
+  SEND_EMAIL_SUCCESS: 'Email sent successfully:',
+  SEND_EMAIL_FAILURE: 'Error while sending email:',
+};
 
-export const enum ValidationMessages {
-  INVALID_EMAIL = 'Please enter a valid email address',
-  MIN_CHAR = 'should be at least 4 characters long',
-  REQUIRED = 'is a required field',
-  PASSWORD_INVALID = 'Password length should be at least 6',
-  USERNAME_INVALID = 'should be alphanumeric',
-  MAX_CHAR = ' length should be upto 30',
-  MAX_CHAR_CUSTOM = 'length must be less than 50',
-  USERNAME_ALREADY_EXIST = 'Username already exist',
-  UNAUTHORIZED_USER = 'You are not authorized',
-  MIN_MEMBERS = 'Minimum 2 members required',
-  MIN_USERS = 'Minimum 2 users required',
-  INVALID_DECK_TYPE = 'DeckType must be one of [SERIAL, EVEN, ODD, FIBONACCI',
-  INVALID_TICKET_TYPE = `Ticket type must be on of [Bug, Story, Task]`,
-  INVALID_BASE_NUMBER = 'should be a number',
-  INVALID_BASE_STRING = 'should be a string',
-  MIN_TICKET_1 = 'At least one ticket should be there',
-  ALPHANUMERIC = 'should be alphanumeric',
-  POKER_BOARD_MAX = 'should be upto 30',
-  POKER_BOARD_USER_MIN = ' should be at least 2',
-  INVALID_MANAGER = 'Invalid Manager id',
-  INVALID_ROLE_TYPE = `Role must be one of [MANAGER, PLAYER, SPECTATOR]`,
-  GROUP_NAME_INVALID = 'Groupname should be alphanumeric',
-  GROUP_NAME_ALREADY_EXIST = 'Groupname already exists',
-}
+export const ResponseMessages = {
+  ACCOUNT_VERIFICATION_SUCCESS: 'Account verified successfully',
+  ACCEPT_POKERBOARD_INVITE_SUCCESS: 'You are added to the pokerboard successfully',
+  GET_GROUPS_ASSOCIATED_TO_USER_SUCCESS: 'Fetched groups associated to the user successfully',
+  GET_POKERBOARD_SUCCESS: 'Fetched pokerboard successfully',
+  GET_TICKETS_SUCCESS: 'Fetched tickets successfully',
+  GET_POKERBOARDS_SUCCESS: 'Fetched pokerboard(s) successfully',
+  GET_USER_SUCCESS: 'Fetched user details successfully',
+  GROUP_CREATION_SUCCESS: 'Group created successfully',
+  GROUP_SEARCH_SUCCESS: 'Groups searched successfully',
+  IMPORT_TICKET_SUCCESS: 'Imported ticket(s) successfully',
+  LOGIN_SUCCESS: 'Logged in successfully',
+  LOGOUT_SUCCESS: 'Logged out successfully',
+  POKERBOARD_CREATE_SUCCESS: 'Pokerboard created successfully',
+  REGISTRATION_SUCCESS:
+    'Registered successfully. Please click on the email verification link sent to the provided email address.',
+  SOME_TICKETS_ADDED_SUCCESSFULLY:
+    'Some ticket already exist. Rest of the tickets were saved successfully',
+  TICKETS_ADDED_SUCCESSFULLY: 'Tickets added successfully',
+  UPDATE_USER_SUCCESS: 'User updated successfully',
+  USER_SEARCH_SUCCESS: 'Fetched users successfully',
+  VERIFICATION_LINK_SENT: 'Verification link sent successfully to your email address',
+};
 
-export const enum ResponseConstants {
-  ALLOW_ORIGIN = 'Access-Control-Allow-Origin',
-  ALLOW_METHOD = 'Access-Control-Allow-Methods',
-  ALLOW_HEADER = 'Access-Control-Allow-Headers',
-  METHODS = 'GET,POST,PUT,DELETE,OPTIONS',
-}
+export const ValidationMessages = {
+  ADMIN_REQUIRED: 'Admin is a required field',
+  DECK_TYPE_REQUIRED: 'Deck type is required field',
+  EMAIL_REQUIRED: 'Email is a required field',
+  FIRST_NAME_MAX_LENGTH: 'First name length can be upto 50',
+  FIRST_NAME_REQUIRED: 'First name is a required field',
+  GROUP_NAME_REQUIRED: 'Group name is a required field',
+  GROUP_NAME_MIN_LENGTH: 'Group name length must be at least 4',
+  GROUP_NAME_MAX_LENGTH: 'Group name length can be upto 30',
+  GROUP_NAME_MUST_BE_ALPHANUMERIC: 'Group name must be alphanumeric',
+  GROUPS_REQUIRED: 'Groups is a required field',
+  ID_REQUIRED: 'Id is a required field',
+  INVALID_DECK_TYPE: 'Invalid deck type. Deck type must be one of [SERIAL, EVEN, ODD, FIBONACCI]',
+  INVALID_EMAIL: 'Please enter a valid email address',
+  INVALID_TICKET_TYPE: 'Invalid ticket type. Ticket type must be one of [Bug, Story, Task]',
+  LAST_NAME_MAX_LENGTH: 'Last name length can be upto 50',
+  LIMIT_SHOULD_BE_A_NATURAL_NUMBER: 'Limit must be atleast 1',
+  MANAGER_REQUIRED: 'Manager is required field',
+  MINIMUM_MEMBERS: 'Minimum 2 members required',
+  PASSWORD_DOES_NOT_MATCH: 'Password does not match',
+  PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
+  PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
+  PASSWORD_REQUIRED: 'Password is a required field',
+  POKERBOARD_ID_REQUIRED: 'Pokerboard id is a required field',
+  POKERBOARD_MIN_MEMBERS: 'Add at least one user or group to create the pokerboard',
+  POKERBOARD_NAME_MAX_LENGTH: 'Pokerboard name length can be upto 30',
+  POKERBOARD_NAME_MIN_LENGTH: 'Pokerboard name length must be atleast 6',
+  POKERBOARD_NAME_MUST_BE_ALPHANUMERIC: 'Pokerboard name must be alphanumeric',
+  POKERBOARD_NAME_REQUIRED: 'Pokerboard name is required field',
+  TICKET_DESCRIPTION_REQUIRED: 'Ticket description is a required field',
+  TICKET_ESTIMATE_SHOULD_BE_A_POSITIVE_NUMBER: 'Ticket estimate should be a positive number',
+  TICKET_ID_REQUIRED: 'Ticket id is a required field',
+  TICKET_SUMMARY_REQUIRED: 'Ticket summary is a required field',
+  TICKET_TYPE_REQUIRED: 'Ticket type is a required field',
+  TICKETS_REQUIRED: 'Tickets is a required field',
+  TOKEN_REQUIRED: 'Token is a required field',
+  USERNAME_ALREADY_EXISTS: 'Username already exists',
+  USERNAME_MAX_LENGTH: 'Username length can be upto 30',
+  USERNAME_MIN_LENGTH: 'Username length must be atleast 4',
+  USERNAME_MUST_BE_ALPHANUMERIC: 'Username must be alphanumeric',
+  USERNAME_REQUIRED: 'Username is a required field',
+  USERS_REQUIRED: 'Users is a required field',
+};

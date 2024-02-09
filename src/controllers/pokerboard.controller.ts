@@ -1,137 +1,105 @@
 import { Request, Response } from 'express';
-import { ErrorMessage, SuccessMessage } from '../constants/message';
-import { InviteStatus } from '../constants/customTypes';
-import { PokerboardErrorType } from '../constants/PokerboardErrorTypes';
-import { Pokerboard } from '../entity/Pokerboard';
-import { Ticket } from '../entity/Ticket';
-import { User } from '../entity/User';
-import { generateCustomResponse } from '../middlewares/user.validation';
-import { IRequest } from '../models/RequestInterface';
-import ResponseMessage from '../models/ResponseMessage';
+import { StatusCodes } from 'http-status-codes';
+import { In } from 'typeorm';
+
+import { ErrorMessages, ResponseMessages } from '../constants/message';
+import { ImportByTypes, InviteStatus } from '../constants/enums';
+import { getGroupsDetails } from '../entity/group/repository';
+import { createPokerboard } from '../entity/pokerboard/repository';
+import { findTickets, getTicketsDetails, saveTickets } from '../entity/ticket/repository';
 import {
-  createPokerboardHelper,
-  getGroupDetails,
-  getTicketDetails,
-  getUserDetails,
-  getUserPokerboardByUserIdAndPokerboardId,
+  findPokerboardsAssociatedToUser,
+  findUserPokerboard,
+  getUsersDetails,
   saveUserPokerboard,
-  addTicketToPokerboardHelper,
-  updateTicketsInDbService,
-  updateRoleHelper,
-} from '../repositories/pokerBoard.repository';
+} from '../entity/userPokerboard/repository';
 import {
-  isManagerHavePermissionToPokerboard,
-  isNotPokerboard,
-} from '../services/pokerboard.validation.helper';
+  importTicketsById,
+  importTicketsByJQL,
+  importTicketsBySprint,
+} from '../helpers/pokerboard.helper';
+import { PokerboardDetails, TicketDetails } from '../types';
+import { makeResponse } from '../utils/common';
+import { setImportTicketResposneMessage } from '../utils/jira';
 
-export const createPokerBoard = async (req: Request, res: Response) => {
-  const responseMessage: ResponseMessage = {
-    data: undefined,
-    message: SuccessMessage.POKER_BOARD_CREATED_SUCCESSFULLY,
-    success: true,
-  };
+export const addTicketsToPokerboard = async (req: Request, res: Response) => {
+  const pokerboard = req.pokerboard;
+  let { tickets } = req.body;
+  const ticketIds = tickets.map((ticket: TicketDetails) => ticket.id);
+  const ticketsData = await findTickets({ where: { id: In(ticketIds) } });
 
-  const body = req.body;
-
-  if (body.users.length === 0 && body.groups.length === 0) {
-    let errorData: any = {};
-    errorData[PokerboardErrorType.MINIMUM_MEMBER] =
-      ErrorMessage.AT_LEAST_GROUP_OR_USER;
-    responseMessage.success = false;
-    responseMessage.data = errorData;
-    responseMessage.message = ErrorMessage.AT_LEAST_GROUP_OR_USER;
-    return res.status(400).json(responseMessage);
-  }
-
-  try {
-    let pokerBoard = await createPokerboardHelper(req.body);
-    responseMessage.data = {
-      ...pokerBoard,
-    };
-    return res.status(201).json(responseMessage);
-  } catch (_) {
-    let errorData: any = {};
-    errorData[PokerboardErrorType.SOMETHING_WENT_WRONG] =
-      ErrorMessage.SOMETHING_WENT_WRONG_WHILE_CREATING_POKER_BOARD;
-    responseMessage.success = false;
-    responseMessage.data = errorData;
-    responseMessage.message =
-      ErrorMessage.SOMETHING_WENT_WRONG_WHILE_CREATING_POKER_BOARD;
-    return res.status(400).json(responseMessage);
+  if (ticketsData.length === 0) {
+    // All the tickets to be added do not exist in the database.
+    await saveTickets(tickets, pokerboard);
+    return res
+      .status(StatusCodes.OK)
+      .json(makeResponse(true, ResponseMessages.TICKETS_ADDED_SUCCESSFULLY));
+  } else if (ticketsData.length === ticketIds.length) {
+    // All the tickets to be added already exist in the database.
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json(makeResponse(false, ErrorMessages.ALL_TICKETS_ALREADY_EXIST));
+  } else {
+    // Some tickets already exist in the database.
+    const alreadyExistingTicketIds = ticketsData.map((ticket) => ticket.id);
+    const data = { partialExist: alreadyExistingTicketIds };
+    tickets = tickets.filter((ticket: TicketDetails) =>
+      alreadyExistingTicketIds.includes(ticket.id),
+    );
+    await saveTickets(tickets, pokerboard);
+    return res
+      .status(StatusCodes.OK)
+      .json(makeResponse(true, ResponseMessages.SOME_TICKETS_ADDED_SUCCESSFULLY, data));
   }
 };
 
-export const acceptJoiningRequest = async (req: Request, res: Response) => {
-  let { pokerBoardId, userId } = req.query;
+export const acceptPokerboardInvite = async (req: Request, res: Response) => {
+  const { pokerboardId } = req.query;
+  const userId = req.user.id;
+  const userPokerboard = await findUserPokerboard({
+    where: { pokerboardId: pokerboardId.toString(), userId },
+  });
 
-  // check if user is invited to a poker-board or not
-  const userPokerBoard = await getUserPokerboardByUserIdAndPokerboardId(
-    userId.toString(),
-    pokerBoardId.toString()
-  );
-
-  let responseMessage: ResponseMessage = {
-    data: undefined,
-    message: '',
-    success: false,
-  };
-
-  if (!userPokerBoard) {
-    let errorData: any = {};
-    errorData[PokerboardErrorType.INVITE] =
-      ErrorMessage.YOU_ARE_NOT_INVITED_TO_THIS_GAME;
-    responseMessage.data = errorData;
-    responseMessage.message = ErrorMessage.YOU_ARE_NOT_INVITED_TO_THIS_GAME;
-    return res.status(400).json(responseMessage);
+  if (!userPokerboard) {
+    const errorData = { invite: ErrorMessages.NOT_INVITED_TO_POKERBOARD };
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json(makeResponse(false, ErrorMessages.NOT_INVITED_TO_POKERBOARD, errorData));
   }
 
   if (
-    userPokerBoard.inviteStatus === InviteStatus.ACCEPTED ||
-    userPokerBoard.inviteStatus === InviteStatus.REJECTED
+    userPokerboard.inviteStatus === InviteStatus.ACCEPTED ||
+    userPokerboard.inviteStatus === InviteStatus.REJECTED
   ) {
-    let errorData: any = {};
-    let message =
-      userPokerBoard.inviteStatus === InviteStatus.ACCEPTED
-        ? ErrorMessage.YOU_HAVE_ALREADY_ACCEPTED_YOUR_INVITATION
-        : ErrorMessage.YOU_HAVE_ALREADY_REJECTED_THE_INVITE;
-    errorData[PokerboardErrorType.INVITE] = message;
-    responseMessage.data = errorData;
-    responseMessage.message = message;
-    return res.status(400).json(responseMessage);
+    const message =
+      userPokerboard.inviteStatus === InviteStatus.ACCEPTED
+        ? ErrorMessages.INVITE_ALREADY_ACCEPTED
+        : ErrorMessages.INVITE_ALREADY_REJECTED;
+    const errorData = { invite: message };
+    return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, message, errorData));
   }
 
-  // now we can accept the invitation
-  userPokerBoard.inviteStatus = InviteStatus.ACCEPTED;
-  await saveUserPokerboard(userPokerBoard);
-  responseMessage.success = true;
-  responseMessage.message = SuccessMessage.ACCEPT_BOARD_INVITATION;
+  userPokerboard.inviteStatus = InviteStatus.ACCEPTED;
+  await saveUserPokerboard(userPokerboard);
 
-  return res.status(200).json(responseMessage);
+  return res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.ACCEPT_POKERBOARD_INVITE_SUCCESS));
 };
 
-export const getPokerboardDetail = async (req: IRequest, res: Response) => {
-  let responseMessage: ResponseMessage = {
-    data: undefined,
-    message: '',
-    success: true,
-  };
+export const createUserPokerboard = async (req: Request, res: Response) => {
+  const pokerboard = await createPokerboard(req.body);
+  return res
+    .status(StatusCodes.CREATED)
+    .json(makeResponse(true, ResponseMessages.POKERBOARD_CREATE_SUCCESS, pokerboard));
+};
 
-  const pokerboard: Pokerboard = req.pokerboard;
-
-  if (!pokerboard) {
-    let errorData: any = {};
-    errorData[PokerboardErrorType.POKER_BOARD_ID] =
-      ErrorMessage.INVALID_POKERBOARD_ID;
-    responseMessage.success = false;
-    responseMessage.data = errorData;
-    responseMessage.message = ErrorMessage.INVALID_POKERBOARD_ID;
-    return res.status(400).json(responseMessage);
-  }
-
-  const groups = await getGroupDetails(pokerboard);
-  const tickets = await getTicketDetails(pokerboard);
-  const users = await getUserDetails(pokerboard);
-  responseMessage.data = {
+export const getPokerboard = async (req: Request, res: Response) => {
+  const pokerboard = req.pokerboard;
+  const groups = await getGroupsDetails(pokerboard);
+  const tickets = await getTicketsDetails(pokerboard);
+  const users = await getUsersDetails(pokerboard);
+  const pokerboardData = {
     id: pokerboard.id,
     name: pokerboard.name,
     manager: pokerboard.manager,
@@ -141,71 +109,47 @@ export const getPokerboardDetail = async (req: IRequest, res: Response) => {
     tickets: tickets,
     users: users,
   };
-
-  return res.status(200).json(responseMessage);
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.GET_POKERBOARD_SUCCESS, pokerboardData));
 };
 
-export const addTicketsToPokerboard = async (req: IRequest, res: Response) => {
-  let loggedInUser: User = req.user;
-
-  let { tickets: ticketsFromBody } = req.body;
-
-  const pokerboard = req.pokerboard;
-
-  let errorMessage = isNotPokerboard(pokerboard);
-  if (errorMessage) {
-    return res.status(400).json(errorMessage);
-  }
-
-  try {
-    let responseMessage: ResponseMessage = await addTicketToPokerboardHelper(
-      ticketsFromBody,
-      pokerboard
-    );
-    return res.status(201).json(responseMessage);
-  } catch (err) {
-    return res
-      .status(400)
-      .json(generateCustomResponse(false, err.message, err.errData));
-  }
+export const getPokerboardsAssociatedToUser = async (req: Request, res: Response) => {
+  const pokerboards: PokerboardDetails[] = await findPokerboardsAssociatedToUser(req.user);
+  res
+    .status(StatusCodes.OK)
+    .json(makeResponse(true, ResponseMessages.GET_POKERBOARDS_SUCCESS, pokerboards));
 };
 
-export const updateTickets = async (req: IRequest, res: Response) => {
-  const loggedInUser = req.user;
-  let { tickets: ticketsFromBody } = req.body;
-
-  const pokerboard = req.pokerboard;
-
-  let errorMessage = isNotPokerboard(pokerboard);
-
-  if (errorMessage) {
-    return res.status(400).json(errorMessage);
-  }
+export const importTicketsInPokerboard = async (req: Request, res: Response) => {
+  let { ticketsInput, importBy, startAt } = req.query;
+  ticketsInput = ticketsInput?.toString();
+  importBy = importBy?.toString();
+  startAt = startAt?.toString();
+  let result = {};
 
   try {
-    let tickets: Ticket[] = await updateTicketsInDbService(ticketsFromBody);
-    return res
-      .status(200)
-      .json(
-        generateCustomResponse(true, SuccessMessage.TICKETS_UPDATE, tickets)
-      );
+    if (importBy === ImportByTypes.ID) {
+      result = await importTicketsById(ticketsInput);
+    } else if (importBy === ImportByTypes.JQL) {
+      result = await importTicketsByJQL(ticketsInput, startAt);
+    } else if (importBy == ImportByTypes.SPRINT) {
+      result = await importTicketsBySprint(ticketsInput, startAt);
+    }
+    res
+      .status(StatusCodes.OK)
+      .json(makeResponse(true, ResponseMessages.IMPORT_TICKET_SUCCESS, result));
   } catch (error) {
-    return res
-      .status(500)
-      .json(generateCustomResponse(false, error.message, error.errData));
-  }
-};
-
-export const updatePokerboardUsers = async (req: IRequest, res: Response) => {
-  let { users } = req.body;
-  let id: string = req.params.id;
-
-  try {
-    let responseMessage: ResponseMessage = await updateRoleHelper(id, users);
-    return res.status(200).json(responseMessage);
-  } catch (error) {
-    return res
-      .status(500)
-      .json(generateCustomResponse(false, error.message, error.errData));
+    if (error.response) {
+      const status = error.response.status;
+      const message = setImportTicketResposneMessage(status, error.response.statusText);
+      res.status(status).json(makeResponse(false, message));
+    } else if (error.request) {
+      res.status(StatusCodes.NOT_FOUND).json(makeResponse(false, ErrorMessages.NO_TICKETS_FOUND));
+    } else {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json(makeResponse(false, ErrorMessages.SOMETHING_WENT_WRONG));
+    }
   }
 };
