@@ -49,10 +49,15 @@ export const verifyUser = async (req: Request, res: Response) => {
   const token = req.query.token.toString();
   jwt.verify(token, config.JWT.SECRECT, async (error, decoded) => {
     if (error) {
-      const errorData = { verify: ErrorMessages.USER_VERIFICATION_FAILED };
+      let errorData: { token?: string; verify?: string } = {
+        token: ErrorMessages.ACCOUNT_VERIFICATION_FAILED_DUE_TO_INVALID_TOKEN,
+      };
+      if (error instanceof jwt.TokenExpiredError) {
+        errorData = { verify: ErrorMessages.ACCOUNT_VERIFICATION_FAILED_DUE_TO_EXPIRED_TOKEN };
+      }
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json(makeResponse(false, ErrorMessages.USER_VERIFICATION_FAILED, errorData));
+        .json(makeResponse(false, ErrorMessages.ACCOUNT_VERIFICATION_FAILED, errorData));
     } else {
       const email: string = decoded['email'];
       const result = await findAndUpdateUser({ email, isVerified: false }, { isVerified: true });
