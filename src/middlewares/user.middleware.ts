@@ -73,7 +73,7 @@ export const reverifyUserValidation = async (req: Request, res: Response, next: 
     req.user = user;
     next();
   } else {
-    const errorData = { email: ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL };
+    const errorData = { reVerify: ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL };
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json(makeResponse(false, ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL, errorData));

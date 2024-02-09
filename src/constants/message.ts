@@ -40,6 +40,10 @@ export const ErrorMessages = {
   ACCOUNT_ALREADY_EXISTS: 'Account already exists',
   ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
   ACCOUNT_NOT_VERIFIED: 'Your account in not verified. Kindly verify your account',
+  ACCOUNT_VERIFICATION_FAILED: 'Account verfication failed',
+  ACCOUNT_VERIFICATION_FAILED_DUE_TO_EXPIRED_TOKEN:
+    'Account verfication failed. The link has expired',
+  ACCOUNT_VERIFICATION_FAILED_DUE_TO_INVALID_TOKEN: 'Account verification failed. Invalid token',
   ALL_TICKETS_ALREADY_EXIST: 'All the tickets already exist',
   GROUP_NAME_ALREADY_EXISTS: 'Group with the given name already exists',
   INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
@@ -54,7 +58,6 @@ export const ErrorMessages = {
   PERMISSION_DENIED: 'You do not have enough permissions to perform this action',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
   UNAUTHORIZED_ACCESS: 'You do not have access to perform the action',
-  USER_VERIFICATION_FAILED: 'User verfication failed',
   USERS_NOT_FOUND: 'Users you are trying to add do not exist',
 };
 
