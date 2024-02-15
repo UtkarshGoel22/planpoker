@@ -113,6 +113,7 @@ export const ValidationMessages = {
   LAST_NAME_MAX_LENGTH: 'Last name length can be upto 50',
   LIMIT_SHOULD_BE_A_NATURAL_NUMBER: 'Limit must be atleast 1',
   MANAGER_REQUIRED: 'Manager is required field',
+  MEMBERS_REQUIRED: 'Members is required field',
   MINIMUM_MEMBERS: 'Minimum 2 members required',
   PASSWORD_DOES_NOT_MATCH: 'Password does not match',
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',

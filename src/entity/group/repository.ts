@@ -23,7 +23,7 @@ export const createGroup = async (data: CreateGroup): Promise<Group> => {
   }
 
   const newGroup = groupRepository.create({
-    name: data.name,
+    name: data.groupName,
     admin: data.admin,
     countOfMembers: groupMembers.length,
   });
