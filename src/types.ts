@@ -1,7 +1,7 @@
 import { DeckTypes, TicketTypes } from './constants/enums';
 
 export type CreateGroup = {
-  name: string;
+  groupName: string;
   admin: string;
   members: string[];
 };
