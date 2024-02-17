@@ -7,10 +7,10 @@ export type CreateGroup = {
 };
 
 export type CreatePokerboard = {
-  name: string;
+  boardName: string;
   manager: string;
   deckType: DeckTypes.EVEN | DeckTypes.FIBONACCI | DeckTypes.ODD | DeckTypes.SERIAL;
-  users: { id: string; email: string }[];
+  members: { id: string; email: string }[];
   groups: string[];
 };
 
