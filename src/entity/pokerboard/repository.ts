@@ -19,11 +19,11 @@ export const createPokerboard = async (data: CreatePokerboard) => {
   const usersSet = new Set<string>();
   const unregisteredUserEmails: string[] = [];
 
-  data.users.forEach((user) => {
-    if (user.id === UNREGISTERED) {
-      unregisteredUserEmails.push(user.email);
+  data.members.forEach((member) => {
+    if (member.id === UNREGISTERED) {
+      unregisteredUserEmails.push(member.email);
     } else {
-      usersSet.add(user.id);
+      usersSet.add(member.id);
     }
   });
   usersSet.add(data.manager);
@@ -43,7 +43,7 @@ export const createPokerboard = async (data: CreatePokerboard) => {
   const pokerboardRepository = customGetRepository(Pokerboard);
   const newPokerboard = pokerboardRepository.create({
     manager: data.manager,
-    name: data.name,
+    name: data.boardName,
     deckType: data.deckType,
     status: PokerboardStatus.CREATED,
   });

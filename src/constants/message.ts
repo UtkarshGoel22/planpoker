@@ -12,7 +12,7 @@ export const EmailMessages = {
   <p> ${adminFirstName} ${adminLastName} having email as ${adminEmail} added you to the group. </p>
   </body>`,
   INVITE_FOR_SIGN_UP: (pokerboardName: string) => `<body>
-  <h1> Invitation to join ${pokerboardName} pokerboard </h1> 
+  <h1> Invitation to join ${pokerboardName} pokerboard </h1>
   <p> You are invited to join the ${pokerboardName} pokerboard game </p>
   <span> Please signup and accept the invitation to continue: ${config.APP_URL}/signup </span>
   </body>`,
@@ -22,7 +22,7 @@ export const EmailMessages = {
   <span> Invitation Link ${config.APP_URL}/${Routes.POKERBOARD}/invite?pokerboardId=${pokerboardId} </span>
   </body>`,
   REGISTRATION_SUCCESS: (token: string) => `<body>
-  <h1> Welcome to Plan Poker!! </h1> 
+  <h1> Welcome to Plan Poker!! </h1>
   <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
   <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
   </body>`,
@@ -114,7 +114,7 @@ export const ValidationMessages = {
   LIMIT_SHOULD_BE_A_NATURAL_NUMBER: 'Limit must be atleast 1',
   MANAGER_REQUIRED: 'Manager is required field',
   MEMBERS_REQUIRED: 'Members is required field',
-  MINIMUM_MEMBERS: 'Minimum 2 members required',
+  MINIMUM_MEMBERS: 'Minimum 2 members are required',
   PASSWORD_DOES_NOT_MATCH: 'Password does not match',
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
@@ -137,5 +137,4 @@ export const ValidationMessages = {
   USERNAME_MIN_LENGTH: 'Username length must be atleast 4',
   USERNAME_MUST_BE_ALPHANUMERIC: 'Username must be alphanumeric',
   USERNAME_REQUIRED: 'Username is a required field',
-  USERS_REQUIRED: 'Users is a required field',
 };
