@@ -7,6 +7,7 @@ import {
   validateAcceptPokerboardInviteData,
   validateCreatePokerboardData,
   validatePokerboardId,
+  validateUpdatePokerboardTicketsData,
 } from '../helpers/pokerboard.helper';
 import { makeResponse } from '../utils/common';
 
@@ -63,5 +64,15 @@ export const pokerboardIdValidation = async (req: Request, res: Response, next: 
   }
 
   req.pokerboard = pokerboard;
+  next();
+};
+
+export const updateTicketValidation = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    validateUpdatePokerboardTicketsData(req.body);
+  } catch (err) {
+    return res.status(StatusCodes.BAD_REQUEST).json(makeResponse(false, err.message, err.data));
+  }
+
   next();
 };

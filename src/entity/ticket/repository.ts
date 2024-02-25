@@ -37,3 +37,8 @@ export const saveTickets = async (tickets: TicketDetails[], pokerboard: Pokerboa
   });
   ticketRepository.save(newTickets);
 };
+
+export const updateTickets = async (tickets: Ticket[]): Promise<Ticket[]> => {
+  const ticketRepository = customGetRepository(Ticket);
+  return ticketRepository.save(tickets);
+};

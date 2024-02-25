@@ -1,19 +1,24 @@
 import { StatusCodes } from 'http-status-codes';
+import { In } from 'typeorm';
 
 import { Api } from '../constants/api';
 import { EmailSubject } from '../constants/enums';
 import { EmailMessages, ErrorMessages } from '../constants/message';
 import { Pokerboard } from '../entity/pokerboard/model';
 import { createPokerboardInvites } from '../entity/pokerboardInvite/repository';
+import { Ticket } from '../entity/ticket/model';
+import { findTickets, updateTickets } from '../entity/ticket/repository';
 import { User } from '../entity/user/model';
 import {
   AcceptPokerboardInviteSchema,
   CreatePokerboardSchema,
   PokerboardIdSchema,
+  UpdateTicketsSchema,
 } from '../schemas/pokerboard.schema';
 import { validateData } from '../utils/common';
 import { getTicketsFromJIRA } from '../utils/jira';
 import { sendBulkMails } from '../utils/notification';
+import { TicketUpdateDetails } from '../types';
 
 export const importTicketsById = async (ticketsInput: string) => {
   const url: string = `${Api.JIRA.V3_ISSUE}${ticketsInput}`;
@@ -111,6 +116,37 @@ export const sendInvitationMailToVerifiedUsers = async (users: User[], pokerboar
   );
 };
 
+export const updateTicketsInPokerboard = async (tickets: TicketUpdateDetails[]) => {
+  const ticketIds = tickets.map((ticket) => ticket.id);
+  const savedTickets = await findTickets({ where: { id: In(ticketIds), isActive: true } });
+  const ticketsSet: { [key: string]: Ticket } = {};
+
+  savedTickets.forEach((ticket) => (ticketsSet[ticket.id] = ticket));
+
+  tickets.forEach((ticket) => {
+    if (ticketsSet[ticket.id]) {
+      if (ticket.estimate) {
+        ticketsSet[ticket.id].estimate = ticket.estimate;
+      }
+      if (ticket.order) {
+        ticketsSet[ticket.id].order = ticket.order;
+      }
+      if (ticket.summary) {
+        ticketsSet[ticket.id].summary = ticket.summary;
+      }
+      if (ticket.description) {
+        ticketsSet[ticket.id].description = ticket.description;
+      }
+      if (ticket.type) {
+        ticketsSet[ticket.id].type = ticket.type;
+      }
+    }
+  });
+
+  const ticketsToUpdate = Object.values(ticketsSet);
+  return updateTickets(ticketsToUpdate);
+};
+
 export const validateAcceptPokerboardInviteData = (data: object) => {
   try {
     return validateData(AcceptPokerboardInviteSchema, data);
@@ -130,6 +166,14 @@ export const validateCreatePokerboardData = (data: object) => {
 export const validatePokerboardId = (data: object) => {
   try {
     return validateData(PokerboardIdSchema, data);
+  } catch (error) {
+    throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
+  }
+};
+
+export const validateUpdatePokerboardTicketsData = (data: object) => {
+  try {
+    return validateData(UpdateTicketsSchema, data);
   } catch (error) {
     throw { message: ErrorMessages.INVALID_REQUEST_DATA, data: error.data };
   }

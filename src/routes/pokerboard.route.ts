@@ -6,12 +6,14 @@ import {
   createUserPokerboard,
   getPokerboard,
   importTicketsInPokerboard,
+  updatePokerboardTickets,
 } from '../controllers/pokerboard.controller';
 import {
   acceptInviteValidation,
   createPokerboardValidation,
   managerPermission,
   pokerboardIdValidation,
+  updateTicketValidation,
 } from '../middlewares/pokerboard.middleware';
 import { ticketValidation } from '../middlewares/ticket.middleware';
 import { tokenValidation } from '../middlewares/user.middleware';
@@ -34,6 +36,14 @@ router.post(
   ticketValidation,
   managerPermission,
   addTicketsToPokerboard,
+);
+
+router.patch(
+  '/:id/tickets',
+  pokerboardIdValidation,
+  updateTicketValidation,
+  managerPermission,
+  updatePokerboardTickets,
 );
 
 export default router;
