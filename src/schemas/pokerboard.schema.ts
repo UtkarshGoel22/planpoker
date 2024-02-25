@@ -20,7 +20,7 @@ export const AcceptPokerboardInviteSchema = z.object({
 
 export const CreatePokerboardSchema = z
   .object({
-    name: z
+    boardName: z
       .string({ required_error: ValidationMessages.POKERBOARD_NAME_REQUIRED })
       .min(FieldConstraints.POKERBOARD_NAME.MIN, ValidationMessages.POKERBOARD_NAME_MIN_LENGTH)
       .max(FieldConstraints.POKERBOARD_NAME.MAX, ValidationMessages.POKERBOARD_NAME_MAX_LENGTH)
@@ -41,14 +41,14 @@ export const CreatePokerboardSchema = z
         }
       },
     }),
-    users: z.array(UserSchema, { required_error: ValidationMessages.USERS_REQUIRED }),
+    members: z.array(UserSchema, { required_error: ValidationMessages.MEMBERS_REQUIRED }),
     groups: z.array(z.string().min(FieldConstraints.REQUIRED_FIELD), {
       required_error: ValidationMessages.GROUPS_REQUIRED,
     }),
   })
-  .refine((schema) => schema.users.length > 0 || schema.groups.length > 0, {
+  .refine((schema) => schema.members.length > 0 || schema.groups.length > 0, {
     message: ValidationMessages.MINIMUM_MEMBERS,
-    path: [FieldNames.MIN_MEMBERS],
+    path: [FieldNames.MEMBERS],
   });
 
 export const PokerboardIdSchema = z.object({

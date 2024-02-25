@@ -45,8 +45,8 @@ export const addTicketsToPokerboard = async (req: Request, res: Response) => {
     // Some tickets already exist in the database.
     const alreadyExistingTicketIds = ticketsData.map((ticket) => ticket.id);
     const data = { partialExist: alreadyExistingTicketIds };
-    tickets = tickets.filter((ticket: TicketDetails) =>
-      alreadyExistingTicketIds.includes(ticket.id),
+    tickets = tickets.filter(
+      (ticket: TicketDetails) => !alreadyExistingTicketIds.includes(ticket.id),
     );
     await saveTickets(tickets, pokerboard);
     return res

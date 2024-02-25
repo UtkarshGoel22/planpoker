@@ -12,7 +12,7 @@ export const EmailMessages = {
   <p> ${adminFirstName} ${adminLastName} having email as ${adminEmail} added you to the group. </p>
   </body>`,
   INVITE_FOR_SIGN_UP: (pokerboardName: string) => `<body>
-  <h1> Invitation to join ${pokerboardName} pokerboard </h1> 
+  <h1> Invitation to join ${pokerboardName} pokerboard </h1>
   <p> You are invited to join the ${pokerboardName} pokerboard game </p>
   <span> Please signup and accept the invitation to continue: ${config.APP_URL}/signup </span>
   </body>`,
@@ -22,7 +22,7 @@ export const EmailMessages = {
   <span> Invitation Link ${config.APP_URL}/${Routes.POKERBOARD}/invite?pokerboardId=${pokerboardId} </span>
   </body>`,
   REGISTRATION_SUCCESS: (token: string) => `<body>
-  <h1> Welcome to Plan Poker!! </h1> 
+  <h1> Welcome to Plan Poker!! </h1>
   <p> Thank you for registering on our application. Visit our website to start planning for your next project. </p>
   <span> Please verify your account by clicking on the following link: ${config.APP_URL}${Routes.USER}/verify?token=${token} </span>
   </body>`,
@@ -40,6 +40,10 @@ export const ErrorMessages = {
   ACCOUNT_ALREADY_EXISTS: 'Account already exists',
   ACCOUNT_ALREADY_VERIFIED: 'Account already verified',
   ACCOUNT_NOT_VERIFIED: 'Your account in not verified. Kindly verify your account',
+  ACCOUNT_VERIFICATION_FAILED: 'Account verfication failed',
+  ACCOUNT_VERIFICATION_FAILED_DUE_TO_EXPIRED_TOKEN:
+    'Account verfication failed. The link has expired',
+  ACCOUNT_VERIFICATION_FAILED_DUE_TO_INVALID_TOKEN: 'Account verification failed. Invalid token',
   ALL_TICKETS_ALREADY_EXIST: 'All the tickets already exist',
   GROUP_NAME_ALREADY_EXISTS: 'Group with the given name already exists',
   INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
@@ -54,7 +58,6 @@ export const ErrorMessages = {
   PERMISSION_DENIED: 'You do not have enough permissions to perform this action',
   SOMETHING_WENT_WRONG: 'Oops something went wrong, please try again',
   UNAUTHORIZED_ACCESS: 'You do not have access to perform the action',
-  USER_VERIFICATION_FAILED: 'User verfication failed',
   USERS_NOT_FOUND: 'Users you are trying to add do not exist',
 };
 
@@ -82,7 +85,8 @@ export const ResponseMessages = {
   LOGIN_SUCCESS: 'Logged in successfully',
   LOGOUT_SUCCESS: 'Logged out successfully',
   POKERBOARD_CREATE_SUCCESS: 'Pokerboard created successfully',
-  REGISTRATION_SUCCESS: 'Account created successfully',
+  REGISTRATION_SUCCESS:
+    'Registered successfully. Please click on the email verification link sent to the provided email address.',
   SOME_TICKETS_ADDED_SUCCESSFULLY:
     'Some ticket already exist. Rest of the tickets were saved successfully',
   TICKETS_ADDED_SUCCESSFULLY: 'Tickets added successfully',
@@ -110,7 +114,8 @@ export const ValidationMessages = {
   LAST_NAME_MAX_LENGTH: 'Last name length can be upto 50',
   LIMIT_SHOULD_BE_A_NATURAL_NUMBER: 'Limit must be atleast 1',
   MANAGER_REQUIRED: 'Manager is required field',
-  MINIMUM_MEMBERS: 'Minimum 2 members required',
+  MEMBERS_REQUIRED: 'Members is required field',
+  MINIMUM_MEMBERS: 'Minimum 2 members are required',
   PASSWORD_DOES_NOT_MATCH: 'Password does not match',
   PASSWORD_MAX_LENGTH: 'Password length can be upto 30',
   PASSWORD_MIN_LENGTH: 'Password length must be atleast 6',
@@ -134,5 +139,4 @@ export const ValidationMessages = {
   USERNAME_MIN_LENGTH: 'Username length must be atleast 4',
   USERNAME_MUST_BE_ALPHANUMERIC: 'Username must be alphanumeric',
   USERNAME_REQUIRED: 'Username is a required field',
-  USERS_REQUIRED: 'Users is a required field',
 };

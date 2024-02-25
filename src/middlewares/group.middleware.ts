@@ -23,7 +23,7 @@ export const createGroupValidation = async (req: Request, res: Response, next: N
     req.body.members.push(req.body.admin);
   }
 
-  const group = await findGroup({ name: req.body.name, isActive: true });
+  const group = await findGroup({ name: req.body.groupName, isActive: true });
 
   if (group) {
     const errorData = { groupName: ErrorMessages.GROUP_NAME_ALREADY_EXISTS };

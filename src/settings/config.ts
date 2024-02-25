@@ -5,7 +5,7 @@ import { Environments } from '../constants/common';
 dotenv.config();
 
 const config = {
-  APP_URL: process.env.ORIGIN || 'http://localhost:3000',
+  APP_URL: process.env.ORIGIN || 'http://localhost:5173',
   ARGON2ID_SALT: process.env.ARGON2ID_SALT,
   AUTH_TOKEN: { EXPIRY: 7 },
   PORT: process.env.PORT || 3000,

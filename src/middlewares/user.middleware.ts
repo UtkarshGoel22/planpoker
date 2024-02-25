@@ -31,10 +31,13 @@ export const loginUserValidation = async (req: Request, res: Response, next: Nex
       .status(StatusCodes.BAD_REQUEST)
       .json(makeResponse(false, ErrorMessages.ACCOUNT_NOT_VERIFIED, errorData));
   } else {
-    const errorData = { email: ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL };
+    const errorData = {
+      email: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD,
+      password: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD,
+    };
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json(makeResponse(false, ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL, errorData));
+      .json(makeResponse(false, ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD, errorData));
   }
 };
 
@@ -70,7 +73,7 @@ export const reverifyUserValidation = async (req: Request, res: Response, next: 
     req.user = user;
     next();
   } else {
-    const errorData = { email: ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL };
+    const errorData = { reVerify: ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL };
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json(makeResponse(false, ErrorMessages.NO_ACCOUNT_ASSOCIATED_WITH_THE_EMAIL, errorData));

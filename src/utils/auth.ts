@@ -31,7 +31,10 @@ export const comparePassword = async (password: string, savedPassword: string) =
   }
 
   if (!passwordMatch) {
-    errorData = { password: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD };
+    errorData = {
+      email: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD,
+      password: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD,
+    };
     throw {
       statusCode: StatusCodes.BAD_REQUEST,
       message: ErrorMessages.INCORRECT_EMAIL_OR_PASSWORD,

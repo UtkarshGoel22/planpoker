@@ -41,7 +41,7 @@ export const testUserRepository = () => {
         expect(error).toEqual({
           statusCode: StatusCodes.BAD_REQUEST,
           message: ErrorMessages.ACCOUNT_ALREADY_EXISTS,
-          data: { duplicateEntry: ErrorMessages.ACCOUNT_ALREADY_EXISTS },
+          data: { email: ErrorMessages.ACCOUNT_ALREADY_EXISTS },
         });
       }
     });

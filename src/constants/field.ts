@@ -1,7 +1,7 @@
 export const FieldNames = {
   DECK_TYPE: 'deckType',
   PASSWORD: 'password',
-  MIN_MEMBERS: 'minMembers',
+  MEMBERS: 'members',
 };
 
 export const FieldConstraints = {
